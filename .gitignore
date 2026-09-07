@@ -1,0 +1,65 @@
+# Vivado generated content
+*.xpr
+*.xci
+*.dcp
+*.bit
+*.bin
+*.hwh
+*.wdb
+*.wcfg
+*.jou
+*.log
+*.str
+*.pb
+*.rpt
+*.rpx
+*.xsa
+*.ltx
+.Xil/
+*.runs/
+*.cache/
+*.gen/
+*.ip_user_files/
+*.sim/
+*.srcs/
+
+# RTL and model artifacts are private by default
+*.v
+*.sv
+*.svh
+*.vh
+*.pt
+*.pth
+*.onnx
+*.npy
+*.npz
+*.mem
+*.coe
+*.weights
+
+# Dataset and payload artifacts
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.avi
+payload*
+golden*
+parameter*
+weight*
+
+# Python/Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Explicitly permit reviewed public assets
+!assets/**/*.png
+!assets/**/*.jpg
+!public_examples/**/*.sv
+!public_examples/**/*.py
