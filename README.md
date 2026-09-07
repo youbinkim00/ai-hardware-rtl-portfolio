@@ -37,22 +37,29 @@ RTL은 저절로 빠르거나 신뢰성이 높은 것이 아닙니다. 대신 �
 
 세부 NPU architecture는 공개하지 않고 외부 interface와 검증 경계만 설명합니다.
 
-```text
-PYNQ application
-      │ AXI4-Lite control
-      ▼
-┌───────────────────────┐
-│ Custom YOLOv5s NPU    │
-│  Architecture private │
-└───────────────────────┘
-      ▲ AXI4-Stream input       │ AXI4-Stream output
-      │                         ▼
-   AXI DMA MM2S             AXI DMA S2MM
-      ▲                         │
-      └──── AXI Memory-Mapped ──┘
-                    │
-                  PS DDR
+```mermaid
+flowchart LR
+    APP[PYNQ Application] -->|AXI4-Lite control| NPU[Custom YOLOv5s NPU<br/>Architecture private]
+    DDR[(PS DDR)] -->|AXI Memory-Mapped| MM2S[AXI DMA MM2S]
+    MM2S -->|AXI4-Stream input| NPU
+    NPU -->|AXI4-Stream output| S2MM[AXI DMA S2MM]
+    S2MM -->|AXI Memory-Mapped| DDR
+    APP -. buffer ownership .-> DDR
 ```
+
+## Three reading paths
+
+### 30 seconds — What was built?
+
+저정밀 YOLOv5s를 대상으로 software reference, parameterized RTL, full-layer scoreboard, AXI VIP stress, ZCU104 DMA integration과 physical implementation을 하나의 검증 흐름으로 연결했습니다.
+
+### 3 minutes — Is there evidence?
+
+[Verification Strategy](docs/03_VERIFICATION_STRATEGY.md)에서 golden chain과 mismatch 기준을, [AXI VIP Verification](docs/04_AXI_VIP_VERIFICATION.md)에서 input gap·backpressure·packet 검증을, [Physical Design Debugging](docs/06_PHYSICAL_DESIGN_DEBUGGING.md)에서 route/timing 문제를 확인할 수 있습니다.
+
+### Deep dive — Does the author understand the details?
+
+[Engineering Notes](engineering_notes/README.md)는 AXI handshake, DMA, BRAM/URAM, OOC synthesis, incremental DCP와 congestion 분석을 실제 설계에서 얻은 원칙 중심으로 정리합니다.
 
 ## Verification evidence
 
@@ -83,10 +90,13 @@ ZCU104 full AXI design에서 routing은 성공했지만 WNS가 −0.262 ns인 �
 ## Documentation
 
 - [Introduction](docs/00_INTRODUCTION.md)
+- [Project Scope](docs/01_PROJECT_SCOPE.md)
+- [Software–RTL Numeric Contract](docs/02_SW_RTL_NUMERIC_CONTRACT.md)
 - [Verification Strategy](docs/03_VERIFICATION_STRATEGY.md)
 - [AXI VIP Verification](docs/04_AXI_VIP_VERIFICATION.md)
 - [ZCU104 AXI DMA Integration](docs/05_ZCU104_DMA_INTEGRATION.md)
 - [Physical Design Debugging](docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
+- [Results and Limitations](docs/07_RESULTS_AND_LIMITATIONS.md)
 - [Engineering Notes](engineering_notes/README.md)
 - [Disclosure Policy](DISCLOSURE_POLICY.md)
 

@@ -6,14 +6,14 @@
 
 | No. | 주제 | 핵심 내용 |
 |---:|---|---|
-| 001 | AXI VALID/READY | Stall 시 payload stability와 transfer 조건 |
-| 002 | AXI DMA MM2S/S2MM | DDR, memory-mapped AXI와 stream의 관계 |
-| 003 | BRAM IP | TDP/SDP, output register, read latency와 enable |
-| 004 | URAM IP | Width/depth mapping, cascade와 latency |
-| 005 | BRAM→URAM migration | 기능을 유지하며 memory primitive를 변경하는 검증법 |
-| 006 | Vivado OOC | Module reference와 generated target 관리 |
-| 007 | Incremental DCP | Legal route 보존과 수정 logic 반영 확인 |
-| 008 | Congestion debugging | Overlap, failed net, high fanout과 timing을 구분하는 법 |
+| 001 | [AXI VALID/READY](001_AXI_VALID_READY.md) | Stall 시 payload stability와 transfer 조건 |
+| 002 | [AXI DMA MM2S/S2MM](002_AXI_DMA_MM2S_S2MM.md) | DDR, memory-mapped AXI와 stream의 관계 |
+| 003 | [BRAM IP](003_BRAM_IP_PRACTICAL_GUIDE.md) | TDP/SDP, output register, read latency와 enable |
+| 004 | [URAM IP](004_URAM_IP_PRACTICAL_GUIDE.md) | Width/depth mapping, cascade와 latency |
+| 005 | [BRAM→URAM migration](005_BRAM_TO_URAM_MIGRATION.md) | 기능을 유지하며 memory primitive를 변경하는 검증법 |
+| 006 | [Vivado OOC](006_VIVADO_OOC_MODULE_REFERENCE.md) | Module reference와 generated target 관리 |
+| 007 | [Incremental DCP](007_INCREMENTAL_DCP_FLOW.md) | Legal route 보존과 수정 logic 반영 확인 |
+| 008 | [Timing/Congestion](008_TIMING_AND_CONGESTION.md) | Overlap, failed net, high fanout과 timing을 구분하는 법 |
 
 ## Article template
 
