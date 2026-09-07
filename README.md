@@ -23,6 +23,18 @@ YOLOv5s는 convolution만 반복하는 단순 workload가 아닙니다. 서로 �
 
 이 프로젝트는 모델 구조를 과도하게 단순화해 구현 난도를 피하기보다, 검증된 모델의 주요 연산 흐름을 유지하고 발생하는 문제를 hardware architecture와 scheduling으로 해결하는 것을 목표로 했습니다.
 
+이 선택은 단순한 구현 편의가 아니라 **기여의 원인을 분리하기 위한 실험 원칙**입니다. Backbone·neck·multi-scale detection의 주요 graph를 유지하면, channel 축소나 layer 제거에서 얻은 성능·자원 이득을 RTL architecture의 효과로 오인하지 않게 됩니다. 반면 dataset class, activation과 quantization 규칙은 VOC20 응용과 RTL 정수 연산 계약에 맞게 명시적으로 변경했습니다. 따라서 이 결과물은 “공식 checkpoint를 그대로 실행한 것”이 아니라 **YOLOv5s-derived VOC20 low-precision RTL accelerator**로 표현합니다.
+
+설계의 차별점은 특정 convolution 블록 하나가 아니라 다음의 연결에 있습니다.
+
+- 복잡한 graph의 compute·data-supply·control 병목을 함께 분석
+- 단일 layer를 넘어 인접 producer-consumer/branch 구간을 scheduling 범위로 사용
+- 별도 연산기를 계속 추가하지 않고 고정 compute fabric의 역할과 data path를 구간별로 전환
+- feature/weight 이동, parameter prefetch와 completion timing을 연산 schedule과 함께 설계
+- 전체 network의 integer golden부터 AXI와 physical implementation까지 동일한 acceptance chain으로 검증
+
+이 설계 선택의 정당성과 현재 주장 가능한 범위는 [Model Preservation and Hardware Contribution](docs/01_MODEL_PRESERVATION_AND_HARDWARE_CONTRIBUTION.md)에 정리했습니다.
+
 ## Why RTL?
 
 RTL은 저절로 빠르거나 신뢰성이 높은 것이 아닙니다. 대신 병렬도, pipeline stage, memory access, fixed-point arithmetic, handshake와 완료 시점을 cycle 단위로 명시할 수 있습니다. 이 자유도를 올바른 검증과 physical sign-off에 연결하면 다음 특성을 확보할 수 있습니다.
@@ -91,6 +103,7 @@ ZCU104 full AXI design에서 routing은 성공했지만 WNS가 −0.262 ns인 �
 
 - [Introduction](docs/00_INTRODUCTION.md)
 - [Project Scope](docs/01_PROJECT_SCOPE.md)
+- [Model Preservation and Hardware Contribution](docs/01_MODEL_PRESERVATION_AND_HARDWARE_CONTRIBUTION.md)
 - [Software–RTL Numeric Contract](docs/02_SW_RTL_NUMERIC_CONTRACT.md)
 - [Verification Strategy](docs/03_VERIFICATION_STRATEGY.md)
 - [AXI VIP Verification](docs/04_AXI_VIP_VERIFICATION.md)
