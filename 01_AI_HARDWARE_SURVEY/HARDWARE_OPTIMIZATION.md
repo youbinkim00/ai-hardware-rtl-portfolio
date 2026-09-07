@@ -1,5 +1,11 @@
 # Hardware Architecture Optimization
 
+<p align="center">
+  <img src="../assets/external/fpga_structure.png" alt="Generic FPGA structure with logic blocks, programmable interconnect and I/O" width="560">
+</p>
+
+<p align="center"><sub>Logic block, programmable interconnect와 I/O로 구성되는 FPGA의 일반 개념도입니다. YOLOv5s 가속기의 제안 구조가 아닙니다. Johnteslade, <a href="https://commons.wikimedia.org/wiki/File:Fpga_structure.svg">Wikimedia Commons</a>, public domain.</sub></p>
+
 ## 1. Dataflow and mapping
 
 Convolution loop를 어떤 공간·시간 순서로 PE와 memory에 배치하는지에 따라 weight, activation과 partial sum의 reuse가 달라집니다.

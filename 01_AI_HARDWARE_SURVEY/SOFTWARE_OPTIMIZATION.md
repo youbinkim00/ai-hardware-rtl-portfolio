@@ -1,5 +1,11 @@
 # Software and Algorithm Optimization
 
+<p align="center">
+  <img src="../assets/external/neural_network_compression.png" alt="Neural-network compression techniques: pruning, quantization and PCA" width="900">
+</p>
+
+<p align="center"><sub>대표적인 neural-network compression 개념 비교입니다. © J6ancmvs, <a href="https://commons.wikimedia.org/wiki/File:Neural_network_compression_techniques.png">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. 원본 내용은 수정하지 않았습니다.</sub></p>
+
 ## 1. Quantization
 
 Quantization은 weight와 activation을 더 낮은 precision으로 표현합니다. 저장 용량과 memory bandwidth를 줄이고, target hardware가 지원할 경우 더 작은 multiplier 또는 더 높은 packing 병렬도를 사용할 수 있습니다.

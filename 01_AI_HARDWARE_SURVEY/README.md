@@ -4,6 +4,12 @@
 
 이 문서는 AI hardware 분야의 모든 논문을 나열하는 systematic review가 아니라, model optimization과 accelerator optimization을 **같은 trade-off 언어로 연결하기 위한 engineering map**입니다.
 
+<p align="center">
+  <img src="../assets/external/cnn_architecture.png" alt="Convolutional neural network from input through feature learning to output" width="900">
+</p>
+
+<p align="center"><sub>CNN의 일반적인 입력–특징 추출–출력 흐름을 보여주는 배경 개념도입니다. 본 프로젝트의 제안 구조가 아닙니다. © Irisbox, <a href="https://commons.wikimedia.org/wiki/File:Convolutional_Neural_Network.png">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</sub></p>
+
 핵심 질문은 “어떤 기법이 유명한가?”가 아니라 다음 세 가지입니다.
 
 1. Software graph 또는 numeric representation에서 무엇이 바뀌는가?
@@ -16,6 +22,7 @@
 - [Hardware Architecture Optimization](HARDWARE_OPTIMIZATION.md)
 - [Software–Hardware Co-design](SW_HW_CODESIGN.md)
 - [Optimization Trade-off Matrix](OPTIMIZATION_TRADEOFF_MATRIX.md)
+- [External visual asset attribution](../assets/external/ATTRIBUTION.md)
 
 ## Whole-stack view
 
