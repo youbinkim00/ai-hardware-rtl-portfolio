@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">AI Hardware RTL Engineering Portfolio Map</title>
+  <desc id="desc">A three-part portfolio linking an AI hardware survey, a YOLOv5s RTL case study, and a planned MobileNet case study.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071629"/><stop offset="1" stop-color="#102944"/></linearGradient>
+    <linearGradient id="survey" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1f8cff"/><stop offset="1" stop-color="#52c7ff"/></linearGradient>
+    <linearGradient id="case" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff8a1f"/><stop offset="1" stop-color="#ffbd4a"/></linearGradient>
+    <linearGradient id="next" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#15a99a"/><stop offset="1" stop-color="#59d5bd"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#020812" flood-opacity=".42"/></filter>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 Z" fill="#8ea8c3"/></marker>
+  </defs>
+  <rect width="1200" height="520" rx="28" fill="url(#bg)"/>
+  <path d="M40 96H1160" stroke="#1d3b58"/><circle cx="42" cy="96" r="4" fill="#ff9a2f"/>
+  <text x="48" y="55" fill="#f7fbff" font-family="Arial, sans-serif" font-size="27" font-weight="700">Portfolio architecture</text>
+  <text x="48" y="82" fill="#91a8bd" font-family="Arial, sans-serif" font-size="14">KNOWLEDGE MAP  →  IMPLEMENTED CASE  →  TRANSFERABILITY</text>
+
+  <path d="M380 280H448" stroke="#8ea8c3" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M752 280H820" stroke="#8ea8c3" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+  <path d="M600 426 C600 478 232 478 232 414" fill="none" stroke="#5e7892" stroke-width="2" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+  <text x="382" y="467" fill="#8299ae" font-family="Arial, sans-serif" font-size="13">measured evidence refines the engineering map</text>
+
+  <g filter="url(#shadow)">
+    <rect x="58" y="142" width="322" height="272" rx="24" fill="#10253b" stroke="#245071"/>
+    <rect x="58" y="142" width="322" height="9" rx="5" fill="url(#survey)"/>
+    <circle cx="104" cy="197" r="24" fill="#143c60" stroke="#49b8ff" stroke-width="2"/>
+    <path d="M91 197h26M104 184v26M95 188l18 18M113 188l-18 18" stroke="#6dd0ff" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="140" y="190" fill="#62caff" font-family="Arial, sans-serif" font-size="13" font-weight="700">01 · FOUNDATION</text>
+    <text x="140" y="216" fill="#ffffff" font-family="Arial, sans-serif" font-size="22" font-weight="700">AI Hardware Survey</text>
+    <text x="84" y="264" fill="#c5d4e1" font-family="Arial, sans-serif" font-size="15">Quantization · pruning · dataflow</text>
+    <text x="84" y="290" fill="#c5d4e1" font-family="Arial, sans-serif" font-size="15">Memory · power · physical design</text>
+    <rect x="84" y="326" width="116" height="36" rx="18" fill="#143c60"/><text x="142" y="349" text-anchor="middle" fill="#76d5ff" font-family="Arial, sans-serif" font-size="13">TRADE-OFF MAP</text>
+    <text x="84" y="391" fill="#718ba3" font-family="Arial, sans-serif" font-size="12">Reusable evaluation vocabulary</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="439" y="124" width="322" height="308" rx="24" fill="#142338" stroke="#774b21" stroke-width="2"/>
+    <rect x="439" y="124" width="322" height="10" rx="5" fill="url(#case)"/>
+    <circle cx="485" cy="183" r="24" fill="#573719" stroke="#ffab40" stroke-width="2"/>
+    <path d="M473 190l12-18 12 18M477 187h16M485 172v23" fill="none" stroke="#ffc36c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="521" y="176" fill="#ffae45" font-family="Arial, sans-serif" font-size="13" font-weight="700">02 · PRIMARY CASE</text>
+    <text x="521" y="202" fill="#ffffff" font-family="Arial, sans-serif" font-size="22" font-weight="700">YOLOv5s RTL Accelerator</text>
+    <g font-family="Arial, sans-serif" font-size="13" text-anchor="middle">
+      <rect x="468" y="246" width="66" height="38" rx="10" fill="#233c56"/><text x="501" y="270" fill="#d6e5f0">QAT</text>
+      <rect x="552" y="246" width="66" height="38" rx="10" fill="#233c56"/><text x="585" y="270" fill="#d6e5f0">RTL</text>
+      <rect x="636" y="246" width="66" height="38" rx="10" fill="#233c56"/><text x="669" y="270" fill="#d6e5f0">AXI</text>
+      <path d="M534 265h18M618 265h18" stroke="#ffad43" stroke-width="2" marker-end="url(#arrow)"/>
+    </g>
+    <text x="468" y="322" fill="#c5d4e1" font-family="Arial, sans-serif" font-size="15">Bit-exact verification</text>
+    <text x="468" y="348" fill="#c5d4e1" font-family="Arial, sans-serif" font-size="15">ZCU104 integration · route closure</text>
+    <rect x="468" y="375" width="142" height="36" rx="18" fill="#573719"/><text x="539" y="398" text-anchor="middle" fill="#ffc36c" font-family="Arial, sans-serif" font-size="13">ENGINEERING EVIDENCE</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="820" y="142" width="322" height="272" rx="24" fill="#10253b" stroke="#23695f"/>
+    <rect x="820" y="142" width="322" height="9" rx="5" fill="url(#next)"/>
+    <circle cx="866" cy="197" r="24" fill="#164b45" stroke="#51d1bb" stroke-width="2"/>
+    <path d="M855 202h22M859 194h14M863 186h6" stroke="#70e1cd" stroke-width="3" stroke-linecap="round"/>
+    <text x="902" y="190" fill="#57d4bf" font-family="Arial, sans-serif" font-size="13" font-weight="700">03 · NEXT CASE</text>
+    <text x="902" y="216" fill="#ffffff" font-family="Arial, sans-serif" font-size="22" font-weight="700">MobileNet RTL</text>
+    <text x="846" y="264" fill="#c5d4e1" font-family="Arial, sans-serif" font-size="15">Independent lightweight-CNN case</text>
+    <text x="846" y="290" fill="#c5d4e1" font-family="Arial, sans-serif" font-size="15">Same evidence discipline</text>
+    <rect x="846" y="326" width="98" height="36" rx="18" fill="#164b45"/><text x="895" y="349" text-anchor="middle" fill="#70e1cd" font-family="Arial, sans-serif" font-size="13">PLANNED</text>
+    <text x="846" y="391" fill="#718ba3" font-family="Arial, sans-serif" font-size="12">Transferability, not duplication</text>
+  </g>
+</svg>

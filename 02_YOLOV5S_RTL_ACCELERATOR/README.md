@@ -51,15 +51,9 @@ RTL은 저절로 빠르거나 신뢰성이 높은 것이 아닙니다. 대신 �
 
 세부 NPU architecture는 공개하지 않고 외부 interface와 검증 경계만 설명합니다.
 
-```mermaid
-flowchart LR
-    APP[PYNQ Application] -->|AXI4-Lite control| NPU[Custom YOLOv5s NPU<br/>Architecture private]
-    DDR[(PS DDR)] -->|AXI Memory-Mapped| MM2S[AXI DMA MM2S]
-    MM2S -->|AXI4-Stream input| NPU
-    NPU -->|AXI4-Stream output| S2MM[AXI DMA S2MM]
-    S2MM -->|AXI Memory-Mapped| DDR
-    APP -. buffer ownership .-> DDR
-```
+<p align="center">
+  <img src="../assets/diagrams/public_system_boundary.svg" alt="PYNQ, PS DDR, AXI DMA and private YOLOv5s NPU connected through separate control and data planes" width="1250">
+</p>
 
 ## Three reading paths
 

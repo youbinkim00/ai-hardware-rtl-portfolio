@@ -26,20 +26,9 @@
 
 ## Whole-stack view
 
-```mermaid
-flowchart TB
-    MODEL[Model / Workload]
-    SW[Software optimization<br/>quantization · pruning · distillation · NAS]
-    CONTRACT[Deployment contract<br/>precision · sparsity · shape · operator]
-    HW[Hardware architecture<br/>dataflow · PE · memory · interconnect]
-    RTL[RTL implementation<br/>pipeline · enable · protocol · control]
-    PHY[Physical result<br/>timing · area · power · routing]
-    SYS[System result<br/>accuracy · FPS · latency · energy]
-
-    MODEL --> SW --> CONTRACT --> HW --> RTL --> PHY --> SYS
-    SYS -. feedback .-> SW
-    SYS -. feedback .-> HW
-```
+<p align="center">
+  <img src="../assets/diagrams/whole_stack.svg" alt="Closed optimization loop from workload and software optimization to RTL, physical implementation, and measured system evidence" width="1250">
+</p>
 
 ## 핵심 원칙
 

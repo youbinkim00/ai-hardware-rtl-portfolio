@@ -12,15 +12,9 @@
 | [02 · YOLOv5s RTL Accelerator](02_YOLOV5S_RTL_ACCELERATOR/README.md) | Software model부터 RTL, AXI, ZCU104 bitstream/PYNQ까지의 실제 사례 | RTL/AXI 검증 완료, physical closure·board demo 진행 중 |
 | [03 · MobileNet RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md) | 경량 CNN workload에 대한 두 번째 독립 사례 | 자료 정리 전 placeholder |
 
-```mermaid
-flowchart LR
-    S[AI Hardware Survey<br/>Technique and trade-off map]
-    Y[YOLOv5s Case Study<br/>Software → RTL → AXI → FPGA]
-    M[MobileNet Case Study<br/>Planned]
-    S --> Y
-    S -. same evaluation discipline .-> M
-    Y -. lessons and evidence .-> S
-```
+<p align="center">
+  <img src="assets/diagrams/portfolio_map.svg" alt="Portfolio map connecting the AI hardware survey, YOLOv5s case study, and planned MobileNet case study" width="1100">
+</p>
 
 ## How to read this repository
 
@@ -32,14 +26,6 @@ flowchart LR
 
 이 포트폴리오는 특정 기법을 무조건 우수하다고 설명하지 않습니다. 같은 optimization이라도 hardware가 이를 실제로 이용할 수 있어야 latency, energy 또는 area 개선으로 이어집니다. 따라서 모든 선택을 다음 기준으로 봅니다.
 
-```text
-Accuracy contract
-      +
-Useful hardware work / data movement
-      +
-Cycle and protocol correctness
-      +
-Post-route PPA and deployment evidence
-```
+> **Acceptance chain:** accuracy contract → useful hardware work and data movement → cycle/protocol correctness → post-route PPA and deployment evidence
 
 전체 production RTL, trained weights, parameter payload, golden vector, 논문용 상세 architecture와 generated bitstream은 공개하지 않습니다. 공개 범위는 [Disclosure Policy](DISCLOSURE_POLICY.md)를 따릅니다.

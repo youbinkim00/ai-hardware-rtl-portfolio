@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="650" viewBox="0 0 1400 650" role="img" aria-labelledby="title desc">
+  <title id="title">Public boundary of the YOLOv5s FPGA system</title>
+  <desc id="desc">PYNQ software controls the NPU through AXI4-Lite while input and output payloads move between DDR, DMA, and the private NPU through AXI memory-mapped and AXI stream channels.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071524"/><stop offset="1" stop-color="#112b42"/></linearGradient>
+    <linearGradient id="npu" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ff9a30"/><stop offset="1" stop-color="#e06a10"/></linearGradient>
+    <filter id="s" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".34"/></filter>
+    <marker id="blue" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0 0L11 5.5L0 11Z" fill="#56b9ff"/></marker>
+    <marker id="orange" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0 0L11 5.5L0 11Z" fill="#ffad4d"/></marker>
+    <marker id="teal" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0 0L11 5.5L0 11Z" fill="#46d0bd"/></marker>
+  </defs>
+  <rect width="1400" height="650" rx="28" fill="url(#bg)"/>
+  <text x="55" y="60" fill="#fff" font-family="Arial, sans-serif" font-size="29" font-weight="700">Public system boundary</text>
+  <text x="55" y="88" fill="#8da5ba" font-family="Arial, sans-serif" font-size="15">Control plane programs the accelerator. Data plane moves payloads under independent backpressure.</text>
+
+  <rect x="46" y="120" width="1308" height="190" rx="24" fill="#0d2337" stroke="#254861"/>
+  <text x="72" y="151" fill="#64c5ff" font-family="Arial, sans-serif" font-size="13" font-weight="700">CONTROL PLANE · LOW-RATE REGISTER TRANSACTIONS</text>
+  <g filter="url(#s)" font-family="Arial, sans-serif">
+    <rect x="95" y="179" width="235" height="94" rx="18" fill="#123d60" stroke="#4db7ff"/>
+    <text x="212" y="216" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">PYNQ Application</text><text x="212" y="242" text-anchor="middle" fill="#b9d9ee" font-size="13">buffer ownership · start · status</text>
+    <rect x="569" y="179" width="230" height="94" rx="18" fill="#17334d" stroke="#4db7ff"/>
+    <text x="684" y="216" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">AXI Interconnect</text><text x="684" y="242" text-anchor="middle" fill="#b9d9ee" font-size="13">address decode · register access</text>
+    <rect x="1037" y="169" width="250" height="114" rx="18" fill="url(#npu)"/>
+    <text x="1162" y="211" text-anchor="middle" fill="#fff" font-size="21" font-weight="700">Custom YOLOv5s NPU</text><text x="1162" y="239" text-anchor="middle" fill="#fff4e7" font-size="13">AXI4-Lite control registers</text><text x="1162" y="259" text-anchor="middle" fill="#ffe2c2" font-size="12">internal architecture protected</text>
+  </g>
+  <path d="M330 225H569" stroke="#56b9ff" stroke-width="4" marker-end="url(#blue)"/><path d="M799 225H1037" stroke="#56b9ff" stroke-width="4" marker-end="url(#blue)"/>
+  <text x="449" y="208" text-anchor="middle" fill="#91d4ff" font-family="Arial, sans-serif" font-size="12">MMIO WRITE / READ</text><text x="918" y="208" text-anchor="middle" fill="#91d4ff" font-family="Arial, sans-serif" font-size="12">AXI4-LITE</text>
+
+  <rect x="46" y="334" width="1308" height="270" rx="24" fill="#0b2032" stroke="#254861"/>
+  <text x="72" y="365" fill="#59d8c4" font-family="Arial, sans-serif" font-size="13" font-weight="700">DATA PLANE · BULK TENSORS, WEIGHTS, PARAMETERS, AND DETECTION OUTPUTS</text>
+  <g filter="url(#s)" font-family="Arial, sans-serif">
+    <rect x="85" y="406" width="220" height="144" rx="20" fill="#15344e" stroke="#3fa696"/>
+    <path d="M122 447h146v66H122zM133 435h124M142 424h106" fill="none" stroke="#65d8c6" stroke-width="3"/>
+    <text x="195" y="535" text-anchor="middle" fill="#fff" font-size="19" font-weight="700">PS DDR</text>
+    <rect x="438" y="393" width="294" height="170" rx="22" fill="#14344d" stroke="#3fa696"/>
+    <rect x="464" y="421" width="111" height="92" rx="13" fill="#1f5263"/><text x="519" y="452" text-anchor="middle" fill="#7ce6d2" font-size="14" font-weight="700">MM2S</text><text x="519" y="476" text-anchor="middle" fill="#d7eee9" font-size="12">DDR → stream</text><text x="519" y="496" text-anchor="middle" fill="#99bcb6" font-size="11">read channel</text>
+    <rect x="594" y="421" width="111" height="92" rx="13" fill="#1f5263"/><text x="649" y="452" text-anchor="middle" fill="#7ce6d2" font-size="14" font-weight="700">S2MM</text><text x="649" y="476" text-anchor="middle" fill="#d7eee9" font-size="12">stream → DDR</text><text x="649" y="496" text-anchor="middle" fill="#99bcb6" font-size="11">write channel</text>
+    <text x="585" y="544" text-anchor="middle" fill="#fff" font-size="19" font-weight="700">AXI DMA</text>
+    <rect x="1037" y="393" width="250" height="170" rx="22" fill="url(#npu)"/>
+    <rect x="1063" y="420" width="198" height="44" rx="12" fill="#c8550c"/><text x="1162" y="448" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">128-bit AXI4-Stream IN</text>
+    <rect x="1063" y="480" width="198" height="44" rx="12" fill="#c8550c"/><text x="1162" y="508" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">128-bit AXI4-Stream OUT</text>
+    <text x="1162" y="548" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">NPU Stream Boundary</text>
+  </g>
+  <path d="M305 441H438" stroke="#46d0bd" stroke-width="4" marker-end="url(#teal)"/><path d="M438 525H305" stroke="#46d0bd" stroke-width="4" marker-end="url(#teal)"/>
+  <text x="371" y="423" text-anchor="middle" fill="#8ce5d7" font-family="Arial, sans-serif" font-size="11">AXI MM READ</text><text x="371" y="548" text-anchor="middle" fill="#8ce5d7" font-family="Arial, sans-serif" font-size="11">AXI MM WRITE</text>
+  <path d="M732 442H1037" stroke="#ffad4d" stroke-width="5" marker-end="url(#orange)"/><path d="M1037 512H732" stroke="#ffad4d" stroke-width="5" marker-end="url(#orange)"/>
+  <text x="884" y="425" text-anchor="middle" fill="#ffc87b" font-family="Arial, sans-serif" font-size="12">INPUT · WEIGHT · PARAMETER</text><text x="884" y="540" text-anchor="middle" fill="#ffc87b" font-family="Arial, sans-serif" font-size="12">DETECTION OUTPUT</text>
+  <g font-family="Arial, sans-serif" font-size="12"><circle cx="814" cy="583" r="5" fill="#ffad4d"/><text x="827" y="587" fill="#a9bdcd">AXI4-Stream transfer occurs only when TVALID ∧ TREADY</text><circle cx="1110" cy="583" r="5" fill="#56b9ff"/><text x="1123" y="587" fill="#a9bdcd">Control does not carry tensors</text></g>
+</svg>

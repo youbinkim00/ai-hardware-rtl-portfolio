@@ -4,16 +4,9 @@
 
 이 프로젝트는 software 학습 결과를 받아 FPGA에서 실행 가능한 accelerator system으로 연결하는 과정을 다룹니다.
 
-```mermaid
-flowchart LR
-    QAT[QAT checkpoint] --> REF[Integer reference]
-    REF --> VEC[Layer vectors]
-    VEC --> RTL[Parameterized RTL core]
-    RTL --> VIP[AXI VIP verification]
-    VIP --> SOC[ZCU104 DMA integration]
-    SOC --> PHY[Synthesis · Place · Route]
-    PHY --> PYNQ[PYNQ deployment]
-```
+<p align="center">
+  <img src="../../assets/diagrams/project_scope_pipeline.svg" alt="YOLOv5s software-to-FPGA flow with artifacts and acceptance gates" width="1350">
+</p>
 
 담당 범위는 다음과 같습니다.
 
@@ -35,4 +28,3 @@ flowchart LR
 ## Out of public scope
 
 본 저장소는 논문 재현용 source release가 아닙니다. 내부 PE 구조, layer별 schedule, memory banking, 전체 RTL과 trained artifact는 비공개입니다. 공개 목적은 구현의 소유권을 이전하는 것이 아니라 engineering process와 검증 역량을 제시하는 것입니다.
-
