@@ -14,3 +14,11 @@
 - [AMD AXI DMA PG021](https://docs.amd.com/r/en-US/pg021_axi_dma)
 
 모든 SVG는 브라우저에서 확대해도 선명하며, 텍스트 편집기로 색상·문구·좌표를 수정할 수 있습니다.
+
+## Diagram index
+
+- `portfolio_map.svg`: portfolio section map
+- `whole_stack.svg`: software-to-deployment acceptance chain
+- `public_system_boundary.svg`: public AXI/DMA system boundary
+- `project_scope_pipeline.svg`: project verification stages
+- `timing_closure_case_study.svg`: legal-route DCP, local guardband와 dual sign-off flow

@@ -12,6 +12,7 @@
 | Input discontinuity | 3,729 input-gap cycles 포함 | Verified |
 | Output backpressure | 18,200 stalled cycles 포함 | Verified |
 | ZCU104 legal route baseline | Routing error/unrouted/overlap 0 | Verified |
+| Selective wrapper timing guardband | 5.000 ns nominal과 4.800 ns local guard 이중 검증 | Experimental / Pending |
 | ZCU104 200 MHz closure | Incremental implementation 진행 | Pending |
 | PYNQ video demo/FPS | Board 측정 전 | Pending |
 
@@ -30,4 +31,3 @@
 ## Update rule
 
 Pending 항목은 예상치로 채우지 않습니다. 최종 report 또는 board measurement가 확보되면 날짜, configuration과 측정 경계를 함께 기록합니다.
-

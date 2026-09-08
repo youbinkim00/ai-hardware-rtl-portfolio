@@ -82,7 +82,9 @@ RTL은 저절로 빠르거나 신뢰성이 높은 것이 아닙니다. 대신 �
 
 ## Engineering case study: timing closure
 
-ZCU104 full AXI design에서 routing은 성공했지만 WNS가 −0.262 ns인 물리 baseline을 확보했습니다. 최악 경로는 32-bit ARM configuration 검사와 나머지 연산이 넓은 output packer의 clock-enable까지 연결된 control path였습니다.
+Core 단계의 기능과 구현 가능성을 확인한 뒤 ZCU104 full AXI/DMA system으로 확장하자 물리적 배치·배선 조건이 달라졌습니다. Full design에서는 routing은 성공했지만 WNS가 −0.262 ns인 기준점을 확보했습니다. 이는 timing pass가 아니라, 최악 경로를 재현할 수 있는 **legal-route physical baseline**입니다.
+
+최악 경로는 32-bit ARM configuration 검사와 나머지 연산이 넓은 output packer의 clock-enable까지 연결된 routing-dominated control path였습니다.
 
 전체 architecture를 무작정 변경하지 않고 다음 순서로 접근했습니다.
 
@@ -91,9 +93,11 @@ ZCU104 full AXI design에서 routing은 성공했지만 WNS가 −0.262 ns인 �
 3. ARM qualification을 AXI-Lite 경계에서 1-bit pulse로 등록
 4. Frame별 expected output count를 ARM 시 snapshot
 5. Module-reference OOC netlist가 실제로 재생성됐는지 cell 단위 확인
-6. 저장한 full-design DCP 기반 incremental implementation
+6. 초기 `RuntimeOptimized` 설정의 목적 불일치를 공식 문서로 확인하고, 다음 closure 후보를 `TimingClosure`로 선정
+7. 실제 5.000 ns clock을 유지하면서 선택한 wrapper 경로에만 4.800 ns guard 적용
+8. Nominal 200 MHz와 추가 0.200 ns margin을 분리해 sign-off
 
-현재 수정 결과는 구현 진행 중이며, timing이 확정되기 전에는 성공 수치로 표시하지 않습니다. 자세한 내용은 [Physical Design Debugging](docs/06_PHYSICAL_DESIGN_DEBUGGING.md)에 기록합니다.
+Incremental DCP는 hard lock이나 성공 보장이 아니며, 0.200 ns guard도 AXI 규격이 아니라 프로젝트별 engineering margin입니다. `TimingClosure` 구성의 최종 구현 결과는 아직 나오지 않았으므로 timing이 확정되기 전에는 성공 수치로 표시하지 않습니다. 자세한 내용은 [Physical Design Debugging](docs/06_PHYSICAL_DESIGN_DEBUGGING.md)과 [Selective Wrapper Timing Guardband](engineering_notes/009_SELECTIVE_WRAPPER_TIMING_GUARDBAND.md)에 기록합니다.
 
 ## Documentation
 

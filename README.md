@@ -22,6 +22,12 @@
 - 실제로 하나의 복잡한 모델을 RTL과 SoC까지 어떻게 닫았는지 보려면 [YOLOv5s project](02_YOLOV5S_RTL_ACCELERATOR/README.md)로 이동합니다.
 - RTL 설계자의 세부 판단은 YOLO 프로젝트의 [Engineering Notes](02_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md)에 있습니다.
 
+## Featured engineering case
+
+Core 단계에서는 구현 가능한 설계가 full AXI/DMA system으로 확장된 뒤 routing-dominated timing 문제를 보였습니다. 이를 legal-route DCP, 최소 boundary RTL 수정, 선택적 timing guardband와 nominal/guard 이중 sign-off로 다루는 과정은 [Physical Design Debugging Case Study](02_YOLOV5S_RTL_ACCELERATOR/docs/06_PHYSICAL_DESIGN_DEBUGGING.md)에 정리했습니다.
+
+현재 결과는 **timing closure in progress**입니다. 완료되지 않은 수치를 성과로 포장하지 않고, AMD 공식 incremental implementation과 XDC 문서를 근거로 문제 정의·실험 조건·판정 기준을 공개합니다.
+
 ## Engineering position
 
 이 포트폴리오는 특정 기법을 무조건 우수하다고 설명하지 않습니다. 같은 optimization이라도 hardware가 이를 실제로 이용할 수 있어야 latency, energy 또는 area 개선으로 이어집니다. 따라서 모든 선택을 다음 기준으로 봅니다.

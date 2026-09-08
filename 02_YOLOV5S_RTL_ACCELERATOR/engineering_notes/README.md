@@ -14,6 +14,7 @@
 | 006 | [Vivado OOC](006_VIVADO_OOC_MODULE_REFERENCE.md) | Module reference와 generated target 관리 |
 | 007 | [Incremental DCP](007_INCREMENTAL_DCP_FLOW.md) | Legal route 보존과 수정 logic 반영 확인 |
 | 008 | [Timing/Congestion](008_TIMING_AND_CONGESTION.md) | Overlap, failed net, high fanout과 timing을 구분하는 법 |
+| 009 | [Selective wrapper timing guardband](009_SELECTIVE_WRAPPER_TIMING_GUARDBAND.md) | 5.0 ns nominal clock, 4.8 ns 국소 margin과 이중 sign-off |
 
 ## Article template
 

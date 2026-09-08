@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="470" viewBox="0 0 1280 470" role="img" aria-labelledby="title desc">
+  <title id="title">Incremental timing closure case-study flow</title>
+  <desc id="desc">A verified RTL core becomes difficult to route after full AXI integration. A legal routed checkpoint, a minimal boundary fix, a selective wrapper guardband, and TimingClosure incremental implementation lead to separate nominal and margin sign-off gates.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#eef3f8"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0b1f33" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6f82"/>
+    </marker>
+    <style>
+      .eyebrow{font:700 13px 'Segoe UI',Arial,sans-serif;letter-spacing:1.5px;fill:#f37021}
+      .heading{font:700 25px 'Segoe UI',Arial,sans-serif;fill:#0b1f33}
+      .step{font:700 16px 'Segoe UI',Arial,sans-serif;fill:#0b1f33}
+      .body{font:400 13px 'Segoe UI',Arial,sans-serif;fill:#41566a}
+      .small{font:600 12px 'Segoe UI',Arial,sans-serif;fill:#5b6f82}
+      .gate{font:700 14px 'Segoe UI',Arial,sans-serif;fill:#ffffff}
+    </style>
+  </defs>
+  <rect width="1280" height="470" rx="24" fill="url(#bg)"/>
+  <text x="54" y="48" class="eyebrow">PHYSICAL CLOSURE CASE STUDY</text>
+  <text x="54" y="82" class="heading">From a verified core to a routable, timing-closed AXI system</text>
+
+  <line x1="183" y1="205" x2="1087" y2="205" stroke="#c7d2de" stroke-width="4"/>
+
+  <g filter="url(#shadow)">
+    <rect x="50" y="125" width="180" height="160" rx="16" fill="#ffffff" stroke="#9eb4c8"/>
+    <circle cx="140" cy="125" r="24" fill="#2f80ed"/>
+    <text x="140" y="131" text-anchor="middle" class="gate">1</text>
+    <text x="140" y="168" text-anchor="middle" class="step">Core verified</text>
+    <text x="140" y="197" text-anchor="middle" class="body">Functional regression</text>
+    <text x="140" y="219" text-anchor="middle" class="body">and core implementation</text>
+    <rect x="78" y="244" width="124" height="25" rx="12" fill="#eaf3ff"/>
+    <text x="140" y="261" text-anchor="middle" class="small">known-good logic</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="260" y="125" width="180" height="160" rx="16" fill="#ffffff" stroke="#f0a46d"/>
+    <circle cx="350" cy="125" r="24" fill="#f37021"/>
+    <text x="350" y="131" text-anchor="middle" class="gate">2</text>
+    <text x="350" y="168" text-anchor="middle" class="step">Full AXI integration</text>
+    <text x="350" y="197" text-anchor="middle" class="body">DMA · FIFO · PS boundary</text>
+    <text x="350" y="219" text-anchor="middle" class="body">changes physical context</text>
+    <rect x="286" y="244" width="128" height="25" rx="12" fill="#fff0e6"/>
+    <text x="350" y="261" text-anchor="middle" class="small">routing dominated</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="470" y="125" width="180" height="160" rx="16" fill="#ffffff" stroke="#9eb4c8"/>
+    <circle cx="560" cy="125" r="24" fill="#425b76"/>
+    <text x="560" y="131" text-anchor="middle" class="gate">3</text>
+    <text x="560" y="168" text-anchor="middle" class="step">Legal-route baseline</text>
+    <text x="560" y="197" text-anchor="middle" class="body">Route errors = 0</text>
+    <text x="560" y="219" text-anchor="middle" class="body">DCP + hashes preserved</text>
+    <rect x="496" y="244" width="128" height="25" rx="12" fill="#edf1f5"/>
+    <text x="560" y="261" text-anchor="middle" class="small">not timing sign-off</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="680" y="125" width="180" height="160" rx="16" fill="#ffffff" stroke="#8dc7bb"/>
+    <circle cx="770" cy="125" r="24" fill="#2a9d8f"/>
+    <text x="770" y="131" text-anchor="middle" class="gate">4</text>
+    <text x="770" y="168" text-anchor="middle" class="step">Minimal boundary fix</text>
+    <text x="770" y="197" text-anchor="middle" class="body">Break wide CE dependency</text>
+    <text x="770" y="219" text-anchor="middle" class="body">Keep datapath unchanged</text>
+    <rect x="705" y="244" width="130" height="25" rx="12" fill="#e8f6f3"/>
+    <text x="770" y="261" text-anchor="middle" class="small">small netlist delta</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="890" y="125" width="180" height="160" rx="16" fill="#ffffff" stroke="#b3a3d6"/>
+    <circle cx="980" cy="125" r="24" fill="#7559a6"/>
+    <text x="980" y="131" text-anchor="middle" class="gate">5</text>
+    <text x="980" y="168" text-anchor="middle" class="step">Selective guardband</text>
+    <text x="980" y="197" text-anchor="middle" class="body">5.000 ns nominal</text>
+    <text x="980" y="219" text-anchor="middle" class="body">4.800 ns selected endpoints</text>
+    <rect x="916" y="244" width="128" height="25" rx="12" fill="#f2eef9"/>
+    <text x="980" y="261" text-anchor="middle" class="small">engineering margin</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1100" y="125" width="130" height="160" rx="16" fill="#0b1f33"/>
+    <circle cx="1165" cy="125" r="24" fill="#f37021"/>
+    <text x="1165" y="131" text-anchor="middle" class="gate">6</text>
+    <text x="1165" y="168" text-anchor="middle" class="gate">TimingClosure</text>
+    <text x="1165" y="194" text-anchor="middle" class="gate">incremental</text>
+    <text x="1165" y="224" text-anchor="middle" class="body" fill="#d7e0e9">Reuse audited</text>
+    <text x="1165" y="246" text-anchor="middle" class="body" fill="#d7e0e9">failing paths reworked</text>
+  </g>
+
+  <g stroke="#5b6f82" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M230 205 H255"/>
+    <path d="M440 205 H465"/>
+    <path d="M650 205 H675"/>
+    <path d="M860 205 H885"/>
+    <path d="M1070 205 H1095"/>
+  </g>
+
+  <rect x="50" y="332" width="1180" height="92" rx="16" fill="#ffffff" stroke="#d1dae4"/>
+  <text x="76" y="362" class="eyebrow">DUAL SIGN-OFF — RESULTS REMAIN PENDING UNTIL BOTH VIEWS ARE REPORTED</text>
+  <rect x="76" y="382" width="356" height="26" rx="13" fill="#eaf3ff"/>
+  <text x="254" y="400" text-anchor="middle" class="small">Nominal 5.000 ns: real 200 MHz requirement</text>
+  <rect x="462" y="382" width="356" height="26" rx="13" fill="#f2eef9"/>
+  <text x="640" y="400" text-anchor="middle" class="small">Guard 4.800 ns: selected-boundary margin</text>
+  <rect x="848" y="382" width="356" height="26" rx="13" fill="#e8f6f3"/>
+  <text x="1026" y="400" text-anchor="middle" class="small">Route · setup/hold · DRC · exception coverage</text>
+</svg>
