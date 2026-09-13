@@ -1,33 +1,40 @@
 # Results and Limitations
 
-## Verified results
+[← YOLOv5s project](../README.md) · [Portfolio home](../../README.md)
 
-| Category | Evidence | Status |
-|---|---|---:|
-| QAT validation | VOC2007 test set evaluation | Verified |
-| Integer reference | RTL-equivalent arithmetic evaluation | Verified |
-| RTL regression | VOC inputs 10종, full-layer/output mismatch 0 | Verified |
-| Detection output | 이미지당 raw output 100,800개 검사 | Verified |
-| AXI VIP | 33,600 beat data/handshake metadata 비교 | Verified |
+## Evidence table
+
+| Category | Result | Status |
+|---|---:|---:|
+| Selective mixed-precision ablation | 내부 activation 일괄 A4 baseline 대비 mAP@0.5:0.95 +0.46%p | Verified in software evaluation |
+| RTL numeric model | mAP@0.5 79.79%, mAP@0.5:0.95 55.40% | Verified on VOC2007 test |
+| PE utilization | 90.8% | Measured from full-inference RTL cycle schedule |
+| RTL regression | VOC 입력 10종, 이미지당 raw output 100,800개, mismatch 0 | Verified |
+| AXI VIP | 33,600 beat의 data/handshake/`TKEEP`/`TLAST` 비교 | Verified |
 | Input discontinuity | 3,729 input-gap cycles 포함 | Verified |
 | Output backpressure | 18,200 stalled cycles 포함 | Verified |
+| ZCU104 resources | LUT 157.3K, FF 170.3K, BRAM 244, URAM 64, DSP 1,152 | Vivado implementation report |
 | ZCU104 legal route baseline | Routing error/unrouted/overlap 0 | Verified |
-| Selective wrapper timing guardband | 5.000 ns nominal과 4.800 ns local guard 이중 검증 | Experimental / Pending |
-| ZCU104 200 MHz closure | Incremental implementation 진행 | Pending |
-| PYNQ video demo/FPS | Board 측정 전 | Pending |
+| Final clock timing closure | 후보별 190–200 MHz 검증 | In progress |
+| PYNQ continuous-video demo/FPS | Runtime prepared; matching overlay and board measurement 필요 | Pending |
 
-## Accuracy context
+## Measurement boundaries
 
-기존 내부 평가에서 QAT 모델과 RTL-equivalent integer model 사이의 accuracy 차이를 별도로 확인했습니다. 공개용 최종 표에는 checkpoint, evaluation script와 dataset manifest를 다시 고정한 뒤 수치를 확정합니다. 현재 문서의 핵심은 floating accuracy를 과장하는 것이 아니라 software-to-RTL 변환 손실과 RTL mismatch를 분리했다는 점입니다.
+- `mAP`는 고정된 checkpoint, dataset split과 evaluation script에 종속된다.
+- PE utilization은 전체 cycle 중 유효 연산 cycle을 기준으로 한 RTL schedule 결과이다.
+- Resource는 지정 device와 Vivado configuration의 implementation report에서 얻는다.
+- GOPS/FPS가 clock와 cycle count로 산출된 경우 실제 camera-to-display FPS와 구분해야 한다.
+- Vivado power는 activity source와 환경 조건에 따른 추정치이며, board 실측 전력과 동일하지 않다.
+- Legal route는 timing pass를 의미하지 않으므로 WNS/TNS, hold, DRC와 route status를 별도 관리한다.
 
 ## Known limitations
 
-- 현재 accelerator는 arbitrary runtime graph를 실행하는 범용 NPU가 아니라 YOLOv5s 계열 workload에 최적화된 설계입니다.
-- 상세 dataflow 선택 규칙과 multi-layer schedule은 논문 심사 전 공개하지 않습니다.
-- Implementation power는 activity source에 따라 달라지므로 SAIF 기반 평가 전에는 확정 절감률을 주장하지 않습니다.
-- PYNQ video throughput은 전처리·DMA·PL·후처리·display를 분리 측정한 뒤 제시해야 합니다.
-- 하나의 legal route가 timing closure를 의미하지 않으므로 WNS/TNS와 DRC를 별도 관리합니다.
+- 현재 accelerator는 arbitrary runtime graph를 실행하는 범용 NPU가 아니라 YOLOv5s 계열 workload에 최적화된 설계이다.
+- 상세 dataflow 선택 규칙과 multi-layer schedule은 논문 심사 전 공개하지 않는다.
+- YOLOv5s 한 모델만으로 다른 network에 대한 일반성을 확정할 수 없다. MobileNet 등 독립 workload의 ablation이 추가로 필요하다.
+- Implementation power는 SAIF 기반 activity와 board 실측 전력을 분리해 제시해야 한다.
+- PYNQ video throughput은 전처리·DMA/PL·후처리·display를 분리 측정한 뒤 제시한다.
 
 ## Update rule
 
-Pending 항목은 예상치로 채우지 않습니다. 최종 report 또는 board measurement가 확보되면 날짜, configuration과 측정 경계를 함께 기록합니다.
+Pending 항목은 예상치로 채우지 않는다. 최종 report 또는 board measurement가 확보되면 날짜, platform, clock, tool version과 측정 경계를 함께 기록한다.

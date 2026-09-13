@@ -36,5 +36,14 @@ Core와 AXI VIP에서 확인한 조건을 실제 DMA/SmartConnect/FIFO 통합 �
 
 ## Deployment status
 
-ZCU104 URAM 기반 설계의 simulation 및 physical implementation을 점검 중입니다. PYNQ video pipeline과 실제 board FPS는 측정 완료 후 공개하며 예상값을 결과처럼 사용하지 않습니다.
+ZCU104용 PS runtime에는 다음 구조를 준비했습니다.
+
+- 정적 descriptor/payload와 frame별 feature 영역 분리
+- physically contiguous DMA buffer의 다중 slot 운용
+- `S2MM → accelerator arm → MM2S` 시작 순서
+- capture/preprocess, serialized PL inference, postprocess/display의 bounded pipeline
+- frame ID와 buffer ownership을 이용한 stale-frame drop 및 overwrite 방지
+- preprocessing, DMA/PL, postprocessing, display와 end-to-end latency의 분리 계측
+
+현재 저장소에는 matching `.bit`/`.hwh`와 board 측정 로그를 공개하지 않습니다. 따라서 continuous-video demo와 FPS는 해당 artifact pair로 replay·단일 frame·연속 frame 검증을 모두 통과한 뒤 완료 상태로 갱신합니다.
 

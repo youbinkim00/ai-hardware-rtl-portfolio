@@ -1,4 +1,4 @@
-# YOLOv5s 4-bit RTL FPGA Accelerator
+# Mixed-Precision YOLOv5s RTL FPGA Accelerator
 
 > From quantized software reference to bit-exact RTL verification, AXI integration, and ZCU104 physical implementation.
 
@@ -11,13 +11,13 @@
 | 항목 | 내용 |
 |---|---|
 | Workload | YOLOv5s, 640×640 input, VOC20 target |
-| Numeric format | QAT 기반 저정밀 정수 추론, RTL bit-width/rounding/saturation contract |
+| Numeric format | W4와 선택적 A4/A8 mixed precision, RTL bit-width/rounding/saturation contract |
 | Hardware | Parameterized SystemVerilog accelerator |
 | Verification | PyTorch integer reference → layer golden → RTL scoreboard |
 | SoC interface | AXI4-Lite control, AXI4-Stream input/output, AXI DMA |
 | FPGA target | AMD-Xilinx ZCU104 |
-| Clock target | 200 MHz |
-| Current status | RTL/AXI verification 완료, ZCU104 timing closure 진행 중 |
+| Clock target | 구현 후보별 190–200 MHz, 결과에는 적용 clock를 별도 표기 |
+| Current status | RTL/AXI 검증 및 legal route 확보, 최종 timing/board sign-off 진행 중 |
 
 ## Why this project?
 
@@ -78,6 +78,17 @@ RTL은 저절로 빠르거나 신뢰성이 높은 것이 아닙니다. 대신 �
 - input gap 3,729 cycle과 output backpressure 18,200 cycle을 포함한 stress test
 - layer별 expected/actual count와 PASS/FAIL을 자동 집계하는 scoreboard 구성
 
+## Quantitative snapshot
+
+| Category | Result | Interpretation |
+|---|---:|---|
+| Selective mixed precision | 내부 activation 일괄 A4 baseline 대비 mAP@0.5:0.95 +0.46%p | 동일 W4 조건의 software ablation |
+| RTL numeric model | mAP@0.5 79.79%, mAP@0.5:0.95 55.40% | VOC2007 test |
+| PE utilization | 90.8% | 전체 추론 RTL cycle schedule 기준 |
+| ZCU104 resources | LUT 157.3K, FF 170.3K, BRAM 244, URAM 64, DSP 1,152 | 구현 보고서 기준 |
+
+Cycle model, Vivado estimate와 실제 board measurement는 서로 구분한다. 최종 continuous-video FPS는 matching bitstream/HWH와 board 환경에서 측정한 뒤 공개한다.
+
 자세한 내용은 [Verification Strategy](docs/03_VERIFICATION_STRATEGY.md)와 [AXI VIP Verification](docs/04_AXI_VIP_VERIFICATION.md)을 참고하십시오.
 
 ## Engineering case study: timing closure
@@ -110,6 +121,7 @@ Incremental DCP는 hard lock이나 성공 보장이 아니며, 0.200 ns guard도
 - [ZCU104 AXI DMA Integration](docs/05_ZCU104_DMA_INTEGRATION.md)
 - [Physical Design Debugging](docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
 - [Results and Limitations](docs/07_RESULTS_AND_LIMITATIONS.md)
+- [Mission-System Relevance](docs/08_MISSION_SYSTEM_RELEVANCE.md)
 - [Engineering Notes](engineering_notes/README.md)
 - [Disclosure Policy](../DISCLOSURE_POLICY.md)
 
