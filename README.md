@@ -34,7 +34,7 @@
 |---|---|---|
 | [AI Hardware Survey](01_AI_HARDWARE_SURVEY/README.md) | 양자화·pruning·dataflow·memory·power·physical design의 연결 | AI 가속기 기술 지도를 먼저 보고 싶은 분 |
 | [YOLOv5s RTL Accelerator](02_YOLOV5S_RTL_ACCELERATOR/README.md) | SW–RTL 수치 계약부터 AXI/DMA와 ZCU104 구현까지의 주 프로젝트 | RTL·FPGA·SoC 설계 역량을 검토하는 분 |
-| [Mission-System Relevance](02_YOLOV5S_RTL_ACCELERATOR/docs/08_MISSION_SYSTEM_RELEVANCE.md) | 실시간 센서 처리와 임무 시스템 관점에서의 기술 연관성 및 한계 | 방산·항공·무인체계 HW 직무 검토자 |
+| [Real-Time Edge System Relevance](02_YOLOV5S_RTL_ACCELERATOR/docs/08_REALTIME_EDGE_SYSTEM_RELEVANCE.md) | 실시간 센서 처리 시스템 관점의 기술 연관성과 검증 경계 | FPGA·SoC·엣지 AI 설계 역량을 검토하는 분 |
 | [Engineering Notes](02_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md) | AXI handshake, BRAM/URAM, OOC, DCP, timing·congestion 실무 노트 | 구현 세부 판단을 확인하려는 엔지니어 |
 | [MobileNet RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md) | 다른 CNN 구조에 대한 독립 설계 경험 | 확장 경험을 확인하려는 분 |
 
@@ -56,9 +56,9 @@
 
 설계 변경은 정확성, protocol, timing, power와 resource를 동시에 확인한다. 한 지표가 좋아져도 다른 지표 또는 기능이 악화되면 채택하지 않는다. 특히 full AXI/DMA 통합 뒤 발생한 routing-dominated timing 문제는 Tcl로 동일 형식의 보고서를 수집하고 legal-route DCP, incremental reuse와 critical-path 분석을 통해 재현 가능한 문제로 바꾸었다.
 
-## Why this matters for mission systems
+## Why this matters for real-time edge systems
 
-전자기전·감시정찰·무인체계와 같은 임무 시스템에서는 높은 peak 연산량만으로 충분하지 않다. 입력 데이터의 경계, 고정소수점 수치 규칙, backpressure, 완료 시점과 오류 상태가 예측 가능해야 하며 제한된 전력·자원에서 지속적으로 동작해야 한다. 본 프로젝트는 다음 역량을 직접 보여준다.
+실시간 엣지 AI 시스템에서는 높은 peak 연산량만으로 충분하지 않다. 입력 데이터의 경계, 고정소수점 수치 규칙, backpressure, 완료 시점과 오류 상태가 예측 가능해야 하며 제한된 전력·자원에서 지속적으로 동작해야 한다. 본 프로젝트는 다음 역량을 직접 보여준다.
 
 - 센서/영상 AI workload를 cycle-level RTL 요구사항으로 변환
 - 저정밀화 정확도와 PPA를 함께 판단하는 SW–HW co-design
@@ -67,7 +67,7 @@
 - 합성 결과가 아닌 배치·배선·DRC·timing을 기준으로 한 구현 판단
 - 공개 interface와 비공개 핵심 구조를 구분하는 disclosure discipline
 
-본 프로젝트가 군용 인증, 안전 인증 또는 실환경 전자기전 성능을 획득했다는 의미는 아니다. 공개된 학술 FPGA 사례를 통해 **신뢰성 있는 실시간 엣지 AI 하드웨어를 설계·검증하는 기반 역량**을 제시한다.
+본 프로젝트는 공개된 학술 FPGA 사례를 통해 **신뢰성 있는 실시간 엣지 AI 하드웨어를 설계·검증하는 기반 역량**을 제시한다.
 
 ## Recommended reading path
 
@@ -80,4 +80,4 @@
 
 ## Disclosure
 
-이 저장소에는 방산 기밀, 기업 영업비밀 또는 제3자 비공개 자료가 없다. production RTL, trained weights, parameter payload, golden vector, 상세 architecture, Vivado generated product와 bitstream은 공개하지 않는다. 세부 기준은 [Disclosure Policy](DISCLOSURE_POLICY.md)를 따른다.
+이 저장소에는 기업 영업비밀 또는 제3자 비공개 자료가 없다. production RTL, trained weights, parameter payload, golden vector, 상세 architecture, Vivado generated product와 bitstream은 공개하지 않는다. 세부 기준은 [Disclosure Policy](DISCLOSURE_POLICY.md)를 따른다.

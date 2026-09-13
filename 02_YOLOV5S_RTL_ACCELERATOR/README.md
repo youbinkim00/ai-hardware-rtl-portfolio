@@ -121,7 +121,7 @@ Incremental DCP는 hard lock이나 성공 보장이 아니며, 0.200 ns guard도
 - [ZCU104 AXI DMA Integration](docs/05_ZCU104_DMA_INTEGRATION.md)
 - [Physical Design Debugging](docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
 - [Results and Limitations](docs/07_RESULTS_AND_LIMITATIONS.md)
-- [Mission-System Relevance](docs/08_MISSION_SYSTEM_RELEVANCE.md)
+- [Real-Time Edge System Relevance](docs/08_REALTIME_EDGE_SYSTEM_RELEVANCE.md)
 - [Engineering Notes](engineering_notes/README.md)
 - [Disclosure Policy](../DISCLOSURE_POLICY.md)
 
