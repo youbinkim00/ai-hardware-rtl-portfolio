@@ -1,4 +1,4 @@
-# Mixed-Precision YOLOv5s RTL FPGA Accelerator
+﻿# Mixed-Precision YOLOv5s RTL FPGA Accelerator
 
 > From quantized software reference to bit-exact RTL verification, AXI integration, and ZCU104 physical implementation.
 
@@ -46,6 +46,26 @@ RTL은 저절로 빠르거나 신뢰성이 높은 것이 아닙니다. 대신 �
 - 불필요한 데이터 이동과 toggle의 제어
 - backpressure 상황에서도 유지되는 protocol correctness
 - software reference부터 FPGA implementation까지 추적 가능한 검증 근거
+
+## Software-to-RTL pipeline
+
+이 프로젝트의 software stage는 단순히 quantized checkpoint를 만드는 단계가 아니라, **RTL이 따라야 할 numeric contract와 golden reference를 생성하는 단계**입니다.
+
+```mermaid
+flowchart LR
+    A[VOC20 FP32 teacher] --> B[ReLU recovery]
+    B --> C[INT8 QAT]
+    C --> D[W4 + selective A4/A8]
+    D --> E[Integer export]
+    E --> F[Standalone RTL/C-style reference]
+    F --> G[RTL scoreboard]
+```
+
+주요 software checkpoint는 `test2007`에서 FP32 teacher 62.18%, ReLU recovery 60.50%, INT8 QAT 59.89%, final W4 + selective A4/A8 55.94% mAP@0.5:0.95를 기록했습니다.
+
+최종 software-to-integer comparison은 동일한 fixed 640×640 loader에서 다시 수행했습니다. Quantized software reference는 mAP@0.5:0.95 55.84%, source YOLO/Brevitas object 없이 exported integer artifact만으로 실행되는 standalone RTL/C-style reference는 55.40%로, 차이는 **-0.439%p**였습니다.
+
+학습·quantization·distillation·integer export와 검증 기준은 [Software-to-RTL Pipeline](software/README.md)에 정리했습니다.
 
 ## Public system boundary
 
@@ -128,3 +148,4 @@ Incremental DCP는 hard lock이나 성공 보장이 아니며, 0.200 ns guard도
 ## Repository scope
 
 이 저장소는 portfolio case study입니다. 전체 RTL, trained weights, parameter payload, golden vector, Vivado generated products와 논문용 상세 architecture는 포함하지 않습니다. 공개 자료의 재사용 조건은 [LICENSE](../LICENSE.md), 공개 범위는 [Disclosure Policy](../DISCLOSURE_POLICY.md)를 확인하십시오.
+
