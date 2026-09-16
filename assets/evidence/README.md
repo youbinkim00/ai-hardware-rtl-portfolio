@@ -20,3 +20,5 @@
 - detailed NPU microarchitecture, generated product, bitstream, DCP는 공개하지 않음
 - screenshot의 instance name은 historical naming을 포함할 수 있으므로 board/frequency claim은 문서의 verified result와 함께 해석
 - third-party logo/mark는 각 권리자에게 귀속되며, public distribution 전 별도 attribution/license review가 필요한 경우 교체 또는 출처 표기를 수행
+
+- `zcu104_axi_dma_block_design_annotated.png` — actual ZCU104 Vivado Block Design with recruiter-facing PS/PL boundary labels

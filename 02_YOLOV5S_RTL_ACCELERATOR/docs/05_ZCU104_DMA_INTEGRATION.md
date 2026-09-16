@@ -3,9 +3,9 @@
 ## Actual ZCU104 Block Design
 
 <p align="center">
-  <img src="../../assets/evidence/zcu104_axi_dma_block_design.png" alt="Vivado ZCU104 block design connecting Zynq UltraScale+ MPSoC, SmartConnect, AXI DMA, AXI4-Stream FIFO, IRQ concat, reset logic, and the YOLOv5s RTL accelerator" width="1250">
+  <img src="../../assets/evidence/zcu104_axi_dma_block_design_annotated.png" alt="Vivado ZCU104 block design connecting Zynq UltraScale+ MPSoC, SmartConnect, AXI DMA, AXI4-Stream FIFO, IRQ concat, reset logic, and the YOLOv5s RTL accelerator" width="1250">
 </p>
-<p align="center"><sub>현재 ZCU104 통합에 사용한 실제 Vivado Block Design. Custom YOLOv5s core는 외부 AXI interface만 보이고 내부 microarchitecture는 공개하지 않습니다.</sub></p>
+<p align="center"><sub>현재 ZCU104 통합에 사용한 실제 Vivado Block Design. 기업 포트폴리오와 동일하게 PS / SmartConnect / YOLOv5s RTL / FIFO / DMA를 색상 박스로 구분했으며, 내부 microarchitecture는 공개하지 않습니다.</sub></p>
 
 이 그림은 개념적으로 다시 그린 AXI diagram이 아니라 실제 PS-PL integration 구조를 보여줍니다.
 

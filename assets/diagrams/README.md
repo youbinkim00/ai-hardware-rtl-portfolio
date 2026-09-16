@@ -23,3 +23,5 @@
 
 - `../evidence/axi_vip_block_design.png`
 - `../evidence/zcu104_axi_dma_block_design.png`
+
+- `yolov5s_software_to_rtl_pipeline.svg` — QAT · mixed precision · integer export · standalone reference · RTL scoreboard flow

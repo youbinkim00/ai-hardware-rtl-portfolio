@@ -85,9 +85,9 @@ flowchart LR
 세부 NPU architecture는 공개하지 않고 외부 interface와 검증 경계만 설명합니다.
 
 <p align="center">
-  <img src="../assets/evidence/zcu104_axi_dma_block_design.png" alt="Actual Vivado ZCU104 PS/PL block design with AXI DMA, SmartConnect, FIFO and YOLOv5s RTL accelerator" width="1250">
+  <img src="../assets/evidence/zcu104_axi_dma_block_design_annotated.png" alt="Actual Vivado ZCU104 PS/PL block design with AXI DMA, SmartConnect, FIFO and YOLOv5s RTL accelerator" width="1250">
 </p>
-<p align="center"><sub>실제 ZCU104 Vivado Block Design. AXI/PS–PL integration은 tool evidence를 사용하고, NPU 내부 microarchitecture는 공개하지 않습니다.</sub></p>
+<p align="center"><sub>실제 ZCU104 Vivado Block Design에 PS, SmartConnect, YOLOv5s RTL, FIFO, DMA 경계만 색상 박스로 표시했습니다. 내부 NPU microarchitecture는 추가로 공개하지 않습니다.</sub></p>
 
 ## Board demo evidence
 
