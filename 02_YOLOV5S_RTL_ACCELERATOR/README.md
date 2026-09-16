@@ -1,4 +1,4 @@
-﻿# Mixed-Precision YOLOv5s RTL FPGA Accelerator
+# Mixed-Precision YOLOv5s RTL FPGA Accelerator
 
 > From quantized software reference to bit-exact RTL verification, AXI integration, and ZCU104 physical implementation.
 
@@ -72,8 +72,9 @@ flowchart LR
 세부 NPU architecture는 공개하지 않고 외부 interface와 검증 경계만 설명합니다.
 
 <p align="center">
-  <img src="../assets/diagrams/public_system_boundary.svg" alt="PYNQ, PS DDR, AXI DMA and private YOLOv5s NPU connected through separate control and data planes" width="1250">
+  <img src="../assets/evidence/zcu104_axi_dma_block_design.png" alt="Actual Vivado ZCU104 PS/PL block design with AXI DMA, SmartConnect, FIFO and YOLOv5s RTL accelerator" width="1250">
 </p>
+<p align="center"><sub>실제 ZCU104 Vivado Block Design. AXI/PS–PL integration은 tool evidence를 사용하고, NPU 내부 microarchitecture는 공개하지 않습니다.</sub></p>
 
 ## Three reading paths
 
