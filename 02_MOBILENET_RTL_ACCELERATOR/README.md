@@ -2,7 +2,7 @@
 
 > **경량 CNN의 연산·메모리 병목을 RTL로 해결하고 ZCU102 PYNQ 분류 데모까지 구현한 FPGA 가속기**
 
-[← Portfolio home](../README.md) · [YOLOv5s project](../02_YOLOV5S_RTL_ACCELERATOR/README.md)
+[← Portfolio home](../README.md) · [YOLOv5s project](../03_YOLOV5S_RTL_ACCELERATOR/README.md)
 
 ## 30초 요약
 
@@ -72,7 +72,7 @@ Project evidence:
 ## ZCU102 AXI / DMA integration
 
 <p align="center">
-  <img src="../assets/evidence/mobilenet_zcu102_block_design.png" alt="MobileNetV1 ZCU102 Vivado block design" width="1080">
+  <img src="assets/zcu102_axi_dma_block_design.png" alt="MobileNetV1 ZCU102 Vivado block design" width="1080">
 </p>
 <p align="center"><sub>실제 ZCU102 Vivado Block Design. PS, AXI interface, DMA, FIFO와 custom MobileNetV1 IP의 system boundary를 보여줍니다.</sub></p>
 
@@ -89,7 +89,7 @@ MobileNetV1 RTL Accelerator
 ## PYNQ classification demo
 
 <p align="center">
-  <img src="../assets/evidence/mobilenet_pynq_sw_hw_system.png" alt="MobileNetV1 PYNQ software hardware integration" width="650">
+  <img src="assets/pynq_sw_hw_system.png" alt="MobileNetV1 PYNQ software hardware integration" width="650">
 </p>
 
 검증 범위:
@@ -127,3 +127,30 @@ MobileNetV1 RTL Accelerator
 
 Public repository에는 workload, implementation result, AXI/PYNQ system evidence만 공개합니다.  
 full RTL, trained checkpoint, detailed compute architecture, line-buffer/memory-hierarchy figure와 detailed timing diagram은 논문 공개 전까지 포함하지 않습니다.
+
+
+## Repository map
+
+| Folder | 무엇을 보여주는가 |
+|---|---|
+| [`software/`](software/README.md) | INT8 QAT, quantization rule, integer parameter export와 software–RTL reference |
+| [`docs/`](docs/01_WORKLOAD_AND_DESIGN_CHALLENGES.md) | workload, implementation result, verification, ZCU102/PYNQ demo |
+| [`engineering_notes/`](engineering_notes/README.md) | DWC/PWC, local reuse, sliding-window pipeline, AXI/PYNQ 설계 판단 |
+| [`assets/`](assets/README.md) | 실제 ZCU102 Vivado/PYNQ system evidence |
+
+### Software
+- [INT8 QAT training](software/01_TRAINING_AND_INT8_QAT.md)
+- [Integer export and requantization](software/02_INTEGER_EXPORT_AND_REQUANTIZATION.md)
+- [Software–RTL reference](software/03_SOFTWARE_RTL_REFERENCE.md)
+
+### Engineering notes
+- [DWC/PWC workload analysis](engineering_notes/001_DWC_PWC_WORKLOAD_ANALYSIS.md)
+- [Local memory and banking](engineering_notes/002_LOCAL_MEMORY_AND_BANKING.md)
+- [Sliding-window pipeline](engineering_notes/003_SLIDING_WINDOW_PIPELINE.md)
+- [ZCU102 AXI/PYNQ integration](engineering_notes/004_ZCU102_AXI_PYNQ_INTEGRATION.md)
+
+### Documentation
+- [Workload and Design Challenges](docs/01_WORKLOAD_AND_DESIGN_CHALLENGES.md)
+- [Implementation Results](docs/02_IMPLEMENTATION_RESULTS.md)
+- [ZCU102 PYNQ Demo](docs/03_ZCU102_PYNQ_DEMO.md)
+- [Verification and Numeric Flow](docs/04_VERIFICATION_AND_NUMERIC_FLOW.md)

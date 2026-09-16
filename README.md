@@ -49,8 +49,8 @@
 > **수치 해석 기준**  
 > MobileNetV1은 **150 MHz**, YOLOv5s는 **200 MHz** 기준입니다. Power 값은 implementation power report 기준이며 board 전체 실측 전력과 구분합니다.
 
-- [MobileNetV1 RTL Accelerator 자세히 보기](03_MOBILENET_RTL_ACCELERATOR/README.md)
-- [YOLOv5s RTL Accelerator 자세히 보기](02_YOLOV5S_RTL_ACCELERATOR/README.md)
+- [MobileNetV1 RTL Accelerator 자세히 보기](02_MOBILENET_RTL_ACCELERATOR/README.md)
+- [YOLOv5s RTL Accelerator 자세히 보기](03_YOLOV5S_RTL_ACCELERATOR/README.md)
 
 ---
 
@@ -115,7 +115,7 @@
 
 두 프로젝트를 통해 보여주고 싶은 Software 역량은 단순한 “양자화 적용”이 아니라, **정확도 요구를 Bit-width · Scale · Requantization · RTL 연산 규칙 · Memory Cost와 연결해 판단하는 HW–SW 공동 최적화**입니다.
 
-→ [YOLOv5s Software-to-RTL Pipeline](02_YOLOV5S_RTL_ACCELERATOR/software/README.md)
+→ [YOLOv5s Software-to-RTL Pipeline](03_YOLOV5S_RTL_ACCELERATOR/software/README.md)
 
 ---
 
@@ -139,8 +139,8 @@ Software와 PL을 분리하지 않고 **입력 → DMA → RTL Accelerator → �
 
 실제 Vivado system integration:
 
-- [MobileNetV1 ZCU102 AXI/DMA System](03_MOBILENET_RTL_ACCELERATOR/README.md#zcu102-axi--dma-integration)
-- [YOLOv5s ZCU104 AXI/DMA System](02_YOLOV5S_RTL_ACCELERATOR/docs/05_ZCU104_DMA_INTEGRATION.md)
+- [MobileNetV1 ZCU102 AXI/DMA System](02_MOBILENET_RTL_ACCELERATOR/README.md#zcu102-axi--dma-integration)
+- [YOLOv5s ZCU104 AXI/DMA System](03_YOLOV5S_RTL_ACCELERATOR/docs/05_ZCU104_DMA_INTEGRATION.md)
 
 ---
 
@@ -190,17 +190,17 @@ AI로 생성한 영어 infographic 대신, 실제 프로젝트에서 사용한 �
 ## 프로젝트 자세히 보기
 
 ### 02 · MobileNetV1
-- [MobileNetV1 RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md)
+- [MobileNetV1 RTL Accelerator](02_MOBILENET_RTL_ACCELERATOR/README.md)
 
 ### 03 · YOLOv5s
-- [YOLOv5s RTL Accelerator](02_YOLOV5S_RTL_ACCELERATOR/README.md)
-- [Software / QAT / Mixed Precision](02_YOLOV5S_RTL_ACCELERATOR/software/README.md)
-- [Software–RTL Numeric Contract](02_YOLOV5S_RTL_ACCELERATOR/docs/02_SW_RTL_NUMERIC_CONTRACT.md)
-- [Verification Strategy](02_YOLOV5S_RTL_ACCELERATOR/docs/03_VERIFICATION_STRATEGY.md)
-- [AXI VIP Verification](02_YOLOV5S_RTL_ACCELERATOR/docs/04_AXI_VIP_VERIFICATION.md)
-- [ZCU104 DMA Integration](02_YOLOV5S_RTL_ACCELERATOR/docs/05_ZCU104_DMA_INTEGRATION.md)
-- [Physical Design Debugging](02_YOLOV5S_RTL_ACCELERATOR/docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
-- [Engineering Notes](02_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md)
+- [YOLOv5s RTL Accelerator](03_YOLOV5S_RTL_ACCELERATOR/README.md)
+- [Software / QAT / Mixed Precision](03_YOLOV5S_RTL_ACCELERATOR/software/README.md)
+- [Software–RTL Numeric Contract](03_YOLOV5S_RTL_ACCELERATOR/docs/02_SW_RTL_NUMERIC_CONTRACT.md)
+- [Verification Strategy](03_YOLOV5S_RTL_ACCELERATOR/docs/03_VERIFICATION_STRATEGY.md)
+- [AXI VIP Verification](03_YOLOV5S_RTL_ACCELERATOR/docs/04_AXI_VIP_VERIFICATION.md)
+- [ZCU104 DMA Integration](03_YOLOV5S_RTL_ACCELERATOR/docs/05_ZCU104_DMA_INTEGRATION.md)
+- [Physical Design Debugging](03_YOLOV5S_RTL_ACCELERATOR/docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
+- [Engineering Notes](03_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md)
 
 ---
 

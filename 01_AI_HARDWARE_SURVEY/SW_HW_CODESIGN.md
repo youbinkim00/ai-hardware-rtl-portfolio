@@ -63,4 +63,4 @@ QAT accuracy
 
 모델 graph를 과도하게 축소하지 않은 이유도 이 연결을 평가하기 위해서입니다. Model compression에서 얻은 이득과 hardware scheduling에서 얻은 이득을 섞지 않고, 실제 detector의 branch와 multi-scale output을 유지한 상태에서 RTL 문제를 해결합니다.
 
-세부 사례는 [YOLOv5s RTL Accelerator](../02_YOLOV5S_RTL_ACCELERATOR/README.md)를 참고하십시오.
+세부 사례는 [YOLOv5s RTL Accelerator](../03_YOLOV5S_RTL_ACCELERATOR/README.md)를 참고하십시오.
