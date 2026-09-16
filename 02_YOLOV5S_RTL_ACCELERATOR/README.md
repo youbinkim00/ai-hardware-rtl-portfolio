@@ -17,7 +17,7 @@
 | SoC interface | AXI4-Lite control, AXI4-Stream input/output, AXI DMA |
 | FPGA target | AMD-Xilinx ZCU104 |
 | Clock target | 구현 후보별 190–200 MHz, 결과에는 적용 clock를 별도 표기 |
-| Current status | RTL/AXI 검증 및 legal route 확보, 최종 timing/board sign-off 진행 중 |
+| Current status | RTL/AXI 검증, ZCU104 PYNQ 객체검출 데모 구현, legal-route baseline 확보; 최종 timing/public board benchmark는 별도 sign-off |
 
 ## Why this project?
 
@@ -76,6 +76,15 @@ flowchart LR
 </p>
 <p align="center"><sub>실제 ZCU104 Vivado Block Design. AXI/PS–PL integration은 tool evidence를 사용하고, NPU 내부 microarchitecture는 공개하지 않습니다.</sub></p>
 
+## Board demo evidence
+
+<p align="center">
+  <img src="../assets/evidence/yolov5s_zcu104_pynq_demo.png" alt="ZCU104 PYNQ YOLOv5s object detection demo with FPGA board and monitor" width="850">
+</p>
+<p align="center"><sub>ZCU104 PYNQ 기반 object-detection demo. 실제 board와 monitor의 detection overlay를 함께 보여줍니다.</sub></p>
+
+PYNQ demo 구현과 PS/PL integration 범위는 [ZCU104 AXI DMA Integration](docs/05_ZCU104_DMA_INTEGRATION.md)에 정리했습니다. Demo가 구현되었다는 사실과 public board FPS benchmark는 분리하며, matching `.bit`/`.hwh`와 measurement log가 공개되지 않은 상태에서는 numeric continuous-video FPS를 공개 benchmark로 사용하지 않습니다.
+
 ## Three reading paths
 
 ### 30 seconds — What was built?
@@ -108,7 +117,7 @@ flowchart LR
 | PE utilization | 90.8% | 전체 추론 RTL cycle schedule 기준 |
 | ZCU104 resources | LUT 157.3K, FF 170.3K, BRAM 244, URAM 64, DSP 1,152 | 구현 보고서 기준 |
 
-Cycle model, Vivado estimate와 실제 board measurement는 서로 구분한다. 최종 continuous-video FPS는 matching bitstream/HWH와 board 환경에서 측정한 뒤 공개한다.
+Cycle model, Vivado estimate와 실제 board measurement는 서로 구분한다. ZCU104 PYNQ object-detection demo는 구현되어 있지만, matching bitstream/HWH와 measurement log를 public repository에 포함하지 않으므로 numeric continuous-video FPS는 별도 benchmark로 공개하지 않는다.
 
 자세한 내용은 [Verification Strategy](docs/03_VERIFICATION_STRATEGY.md)와 [AXI VIP Verification](docs/04_AXI_VIP_VERIFICATION.md)을 참고하십시오.
 

@@ -21,6 +21,7 @@
 - Golden vector와 dataset image
 - Vivado project/generated output, `.bit`, `.hwh`, `.dcp`
 - 논문용 Top Architecture와 novelty figure
+- MobileNetV1 manuscript의 proposed architecture, adaptive-parallelism, line-buffer, memory-hierarchy와 pipeline-timing novelty figure
 - 재현 조건이 고정되지 않은 power/board benchmark
 
 ## Release gate

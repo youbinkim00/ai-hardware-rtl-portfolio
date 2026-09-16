@@ -8,10 +8,10 @@
 
 | 질문 | 답변 |
 |---|---|
-| 무엇을 설계했는가? | YOLOv5s 계열 detector를 위한 혼합 정밀도 SystemVerilog RTL 가속기와 Zynq 기반 SoC 데이터 경로 |
+| 무엇을 설계했는가? | YOLOv5s 혼합정밀도 detector 가속기와 MobileNetV1 INT8 DSC 가속기, 그리고 Zynq/PYNQ 기반 SoC 시스템 |
 | 무엇이 다른가? | 모델의 주요 graph를 축소해 난도를 피하지 않고, 인접 2~3개 계층의 의존성과 데이터 수명을 함께 분석해 공유 PE의 역할·전달·실행 순서를 정함 |
-| 정확성을 어떻게 증명했는가? | PyTorch 정수 모델 → 계층별 golden → full-layer RTL scoreboard → AXI VIP stress → routed implementation의 검증 사슬 구축 |
-| 시스템 수준에서 무엇을 다뤘는가? | AXI4-Lite 제어, AXI4-Stream, DMA, backpressure, URAM 이식, timing·congestion·DCP 분석 |
+| 정확성을 어떻게 증명했는가? | YOLO는 integer reference → RTL scoreboard → AXI VIP regression으로, MobileNet은 INT8 QAT → FPGA output/reference comparison → PYNQ demo로 검증 경계를 분리 |
+| 시스템 수준에서 무엇을 다뤘는가? | AXI4-Lite/Stream, DMA, FIFO, PYNQ overlay, ZCU102/ZCU104 PS–PL 통합, backpressure와 timing/congestion 분석 |
 | 공개하지 않는 것은? | 전체 RTL, 학습 weight, parameter payload, 상세 PE/메모리 구조, 논문용 핵심 도면과 bitstream |
 
 ## Evidence snapshot
@@ -24,7 +24,9 @@
 | AXI stress | 33,600 beat, input gap 3,729 cycle, output stall 18,200 cycle | AXI VIP simulation |
 | ZCU104 구현 자원 | LUT 157.3K, FF 170.3K, BRAM 244, URAM 64, DSP 1,152 | Vivado implementation report |
 | ZCU104 배치·배선 | legal-route baseline 확보 | route report |
-| 최종 board video FPS | 공개 전 검증 단계 | bitstream/HWH pair와 board 측정 필요 |
+| MobileNetV1 PE 활용률 | 98.64% | layer-adaptive implementation evidence |
+| MobileNetV1 구현 성능 | 252.7 FPS, 287.6 GOPS | 150 MHz XCZU9EG implementation |
+| MobileNetV1 효율 | 66.9 GOPS/W, 3.34 GOPS/DSP | implementation comparison || 최종 board video FPS | 공개 전 검증 단계 | bitstream/HWH pair와 board 측정 필요 |
 
 수치는 서로 다른 검증 경계를 섞지 않는다. 예를 들어 cycle 기반 FPS, Vivado power estimate와 실제 PYNQ 영상 FPS는 별도의 결과이며, 최종 보드 측정 전에는 같은 성과로 표현하지 않는다.
 
@@ -36,11 +38,23 @@
 | [YOLOv5s RTL Accelerator](02_YOLOV5S_RTL_ACCELERATOR/README.md) | SW–RTL 수치 계약부터 AXI/DMA와 ZCU104 구현까지의 주 프로젝트 | RTL·FPGA·SoC 설계 역량을 검토하는 분 |
 | [Real-Time Edge System Relevance](02_YOLOV5S_RTL_ACCELERATOR/docs/08_REALTIME_EDGE_SYSTEM_RELEVANCE.md) | 실시간 센서 처리 시스템 관점의 기술 연관성과 검증 경계 | FPGA·SoC·엣지 AI 설계 역량을 검토하는 분 |
 | [Engineering Notes](02_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md) | AXI handshake, BRAM/URAM, OOC, DCP, timing·congestion 실무 노트 | 구현 세부 판단을 확인하려는 엔지니어 |
-| [MobileNet RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md) | 다른 CNN 구조에 대한 독립 설계 경험 | 확장 경험을 확인하려는 분 |
+| [MobileNetV1 RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md) | INT8 QAT, DSC-aware RTL, ZCU102 AXI/DMA와 PYNQ classification demo | 독립 workload에서의 설계·통합 역량을 확인하려는 분 |
 
 <p align="center">
   <img src="assets/diagrams/portfolio_map.svg" alt="Portfolio map" width="1050">
 </p>
+
+## Second implemented case: MobileNetV1
+
+YOLOv5s와 별개로 MobileNetV1 INT8 accelerator를 ZCU102에 구현해 depthwise-separable convolution workload에서의 자원·memory·pipeline 설계를 검증했습니다.
+
+- PE utilization **98.64%**
+- **252.7 FPS**, **287.6 GOPS**
+- **66.9 GOPS/W**, **3.34 GOPS/DSP**
+- AXI4-Stream/Lite + AXI DMA + FIFO 기반 ZCU102 system integration
+- PYNQ overlay 기반 image-classification demo 구현 및 reference-output 비교
+
+MobileNet manuscript의 proposed architecture, line-buffer, memory hierarchy, layer-adaptive parallelism과 pipeline timing figure는 논문 공개 전이므로 이 repository에 복사하지 않습니다.
 
 ## Core engineering contribution
 
@@ -77,6 +91,7 @@
 4. [AXI VIP verification](02_YOLOV5S_RTL_ACCELERATOR/docs/04_AXI_VIP_VERIFICATION.md)
 5. [Physical design debugging](02_YOLOV5S_RTL_ACCELERATOR/docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
 6. [Results and limitations](02_YOLOV5S_RTL_ACCELERATOR/docs/07_RESULTS_AND_LIMITATIONS.md)
+7. [MobileNetV1 project overview](03_MOBILENET_RTL_ACCELERATOR/README.md)
 
 ## Disclosure
 

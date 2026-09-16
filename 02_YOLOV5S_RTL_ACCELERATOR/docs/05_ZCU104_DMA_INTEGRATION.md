@@ -7,7 +7,7 @@
 </p>
 <p align="center"><sub>현재 ZCU104 통합에 사용한 실제 Vivado Block Design. Custom YOLOv5s core는 외부 AXI interface만 보이고 내부 microarchitecture는 공개하지 않습니다.</sub></p>
 
-이 그림은 개념적으로 다시 그린 AXI diagram이 아니라 실제 PS–PL integration 구조를 보여줍니다. 주요 데이터/제어 경계는 다음과 같습니다.
+이 그림은 개념적으로 다시 그린 AXI diagram이 아니라 실제 PS-PL integration 구조를 보여줍니다.
 
 ```text
 PYNQ / PS software
@@ -39,30 +39,38 @@ PYNQ / PS software
 
 ## Integration verification
 
-Core와 AXI VIP에서 확인한 조건을 실제 DMA/SmartConnect/FIFO 통합 환경에서도 유지해야 합니다.
+Core와 AXI VIP에서 확인한 조건을 실제 DMA/SmartConnect/FIFO 통합 환경에서도 유지합니다.
 
-- Reset 및 clock domain 연결
-- Address map과 register access
+- reset 및 clock domain 연결
+- address map과 register access
 - DMA length와 NPU expected count 일치
-- Input completion, layer request와 parameter supply 순서
-- Output FIFO backpressure
-- Final TLAST와 DMA completion
-- Frame 간 상태 초기화 및 buffer ownership
+- input completion, layer request와 parameter supply 순서
+- output FIFO backpressure
+- final TLAST와 DMA completion
+- frame 간 상태 초기화 및 buffer ownership
 - NPU/DMA interrupt propagation
 
 ## Clocking note
 
 Block Design의 instance 이름에 과거 주파수를 암시하는 문자열이 남아 있을 수 있으므로 instance name을 주파수 근거로 사용하지 않습니다. 실제 clock target은 PS `pl_clk0` 설정과 propagated clock metadata, 이후 synthesized/implemented timing report로 검증합니다.
 
-## Deployment status
+## PYNQ object-detection demo
 
-ZCU104용 PS runtime에는 다음 구조를 준비했습니다.
+<p align="center">
+  <img src="../../assets/evidence/yolov5s_zcu104_pynq_demo.png" alt="ZCU104 PYNQ YOLOv5s object detection demo with FPGA board and monitor displaying detected objects" width="850">
+</p>
+<p align="center"><sub>ZCU104 기반 PYNQ object-detection demo evidence. Monitor의 detection overlay와 실제 FPGA board 동작을 함께 보여줍니다.</sub></p>
 
-- 정적 descriptor/payload와 frame별 feature 영역 분리
-- physically contiguous DMA buffer의 다중 slot 운용
-- `S2MM → accelerator arm → MM2S` 시작 순서
-- capture/preprocess, serialized PL inference, postprocess/display의 bounded pipeline
-- frame ID와 buffer ownership을 이용한 stale-frame drop 및 overwrite 방지
-- preprocessing, DMA/PL, postprocessing, display와 end-to-end latency의 분리 계측
+Source portfolio에서는 다음 board-level integration을 완료했다고 기록합니다.
 
-현재 저장소에는 matching `.bit`/`.hwh`와 board 측정 로그를 공개하지 않습니다. 따라서 continuous-video demo와 FPS는 해당 artifact pair로 replay·single-frame·continuous-frame 검증을 모두 통과한 뒤 완료 상태로 갱신합니다.
+- ZCU104 PYNQ environment에서 overlay / DMA 기반 accelerator control
+- integer reference output과 accelerator output consistency verification
+- PS processing과 PL inference overlap
+- latest-frame-first policy로 continuous video latency accumulation 억제
+- video input → object detection overlay까지 demo 구현
+- stage-level latency, inference FPS, display FPS의 분리 측정
+
+## Public benchmark boundary
+
+PYNQ demo가 구현되었다는 사실과 board photo는 공개하지만, 이 repository에는 matching `.bit`/`.hwh`와 측정 log를 포함하지 않습니다.  
+따라서 continuous-video FPS 수치를 공개 benchmark처럼 제시하지 않고, accelerator cycle/implementation result와 board application measurement를 분리합니다.
