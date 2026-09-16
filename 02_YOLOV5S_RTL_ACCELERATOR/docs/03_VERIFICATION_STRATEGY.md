@@ -45,11 +45,15 @@ Per-layer and end-to-end PASS/FAIL
 
 ## Public evidence
 
-공개 저장소에는 전체 golden vector 대신 다음 자료만 포함할 예정입니다.
+현재 repository에서 공개하고 있는 verification evidence:
 
-- 경로와 내부 이름을 제거한 PASS summary
-- 대표 layer compare 화면
-- detection output count 결과
-- scoreboard 구조의 축약 예제
-- 검증 단계와 acceptance criteria
+- regression input 수, detection raw-output count와 mismatch 결과
+- scoreboard의 count/data acceptance policy
+- architecture를 노출하지 않는 독립 `scoreboard_skeleton.sv`
+- AXI4-Stream stall payload를 검사하는 `axi_stream_stability_checker.sv`
+- 실제 AXI VIP Block Design
+- AXI VIP stress 조건과 output-beat/handshake 검증 결과
 
+전체 golden vector, private hierarchy와 parameter payload는 공개하지 않습니다.
+
+추가 visual evidence가 확보되면 별도 artifact로 둘 수 있는 항목은 representative layer-compare 화면, annotated backpressure waveform과 scoreboard PASS summary입니다. 이들은 현재 검증 결과의 성립 조건이 아니라 **추가 공개 자료**입니다.

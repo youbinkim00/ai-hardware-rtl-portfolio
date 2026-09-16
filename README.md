@@ -26,9 +26,11 @@
 | ZCU104 배치·배선 | legal-route baseline 확보 | route report |
 | MobileNetV1 PE 활용률 | 98.64% | layer-adaptive implementation evidence |
 | MobileNetV1 구현 성능 | 252.7 FPS, 287.6 GOPS | 150 MHz XCZU9EG implementation |
-| MobileNetV1 효율 | 66.9 GOPS/W, 3.34 GOPS/DSP | implementation comparison || 최종 board video FPS | 공개 전 검증 단계 | bitstream/HWH pair와 board 측정 필요 |
+| MobileNetV1 효율 | 66.9 GOPS/W, 3.34 GOPS/DSP | implementation comparison |
+| ZCU104 PYNQ object-detection demo | 실제 board + monitor detection overlay | implemented / demonstrated |
+| Numeric continuous-video FPS | public matching `.bit`/`.hwh` + measurement log 미포함 | not published |
 
-수치는 서로 다른 검증 경계를 섞지 않는다. 예를 들어 cycle 기반 FPS, Vivado power estimate와 실제 PYNQ 영상 FPS는 별도의 결과이며, 최종 보드 측정 전에는 같은 성과로 표현하지 않는다.
+수치는 서로 다른 검증 경계를 섞지 않는다. 예를 들어 accelerator cycle 기반 FPS, Vivado power estimate, PYNQ demo 구현 여부와 public end-to-end FPS benchmark는 서로 다른 evidence boundary로 관리한다.
 
 ## Portfolio map
 
