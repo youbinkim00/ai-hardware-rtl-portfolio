@@ -15,10 +15,10 @@
 | 구분 | 02 · MobileNetV1 | 03 · YOLOv5s |
 |---|---|---|
 | 응용 | 영상 분류 | 객체 검출 |
-| Software | INT8 QAT | QAT · Knowledge Distillation · W4/A4·A8 Mixed Precision |
+| Software / Precision | INT8 QAT · W8/A8 | QAT · Knowledge Distillation · W4/A4·A8 Mixed Precision |
 | 주요 HW 문제 | DWC/PWC의 서로 다른 연산 특성, 메모리 접근 비용 | Branch/Concat/Multi-scale 경로의 계층 의존성, 연산 대기, 데이터 이동 |
 | RTL 설계 | 가변 병렬도 · Sliding-window Pipeline · Local Memory Reuse | 공유 PE · 계층 의존성 기반 Dataflow · On-chip Feature Lifetime 관리 |
-| FPGA | ZCU102 / XCZU9EG | ZCU104 |
+| Board / Device | ZCU102 / XCZU9EG | ZCU104 / XCZU7EV |
 | System | AXI4-Lite/Stream · DMA · FIFO · PYNQ | AXI4-Lite/Stream · DMA · SmartConnect · FIFO · PYNQ |
 | Demo | **PYNQ 영상 분류 구현** | **PYNQ 객체 검출 구현** |
 
@@ -31,9 +31,10 @@
 
 | Metric | MobileNetV1 | YOLOv5s |
 |---|---:|---:|
-| FPGA | ZCU102 / XCZU9EG | ZCU104 |
-| Clock | 150 MHz | **200 MHz** |
-| Precision | INT8 | W4 / A4·A8 Mixed Precision |
+| Board | ZCU102 | ZCU104 |
+| FPGA Device | **XCZU9EG** | **XCZU7EV** |
+| Clock | **150 MHz** | **200 MHz** |
+| Weight / Activation Precision | **W8 / A8 (INT8)** | **W4 / A4·A8 (Mixed Precision)** |
 | LUT | 171.3K | 157.3K |
 | FF | 100K | 170.3K |
 | BRAM | 489.5 | 244 |
@@ -43,7 +44,7 @@
 | Throughput | **287.6 GOPS** | **1,224.4 GOPS** |
 | Power report | 4.296 W | 4.59 W |
 | Power efficiency | **66.9 GOPS/W** | **266.8 GOPS/W** |
-| PYNQ Demo | **Classification 구현** | **Object Detection 구현** |
+| PYNQ Demo | **Image Classification 구현** | **Object Detection 구현** |
 
 > **수치 해석 기준**  
 > MobileNetV1은 **150 MHz**, YOLOv5s는 **200 MHz** 기준입니다. Power 값은 implementation power report 기준이며 board 전체 실측 전력과 구분합니다.
