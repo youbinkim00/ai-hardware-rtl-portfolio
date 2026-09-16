@@ -32,7 +32,7 @@
 | Metric | MobileNetV1 | YOLOv5s |
 |---|---:|---:|
 | FPGA | ZCU102 / XCZU9EG | ZCU104 |
-| Clock | 150 MHz | 200 MHz 기준 accelerator 성능 |
+| Clock | 150 MHz | **200 MHz** |
 | Precision | INT8 | W4 / A4·A8 Mixed Precision |
 | LUT | 171.3K | 157.3K |
 | FF | 100K | 170.3K |
@@ -46,7 +46,7 @@
 | PYNQ Demo | **Classification 구현** | **Object Detection 구현** |
 
 > **수치 해석 기준**  
-> MobileNetV1은 150 MHz implementation 결과입니다. YOLOv5s의 76.92 FPS / 1,224.4 GOPS는 200 MHz 기준 accelerator 성능으로 정리한 값이며, 현재 repository의 final timing closure와 camera-to-display FPS는 별도의 검증 경계로 관리합니다. Power 값은 implementation power report 기준이며 board 전체 실측 전력과 구분합니다.
+> MobileNetV1은 **150 MHz**, YOLOv5s는 **200 MHz** 기준입니다. Power 값은 implementation power report 기준이며 board 전체 실측 전력과 구분합니다.
 
 - [MobileNetV1 RTL Accelerator 자세히 보기](03_MOBILENET_RTL_ACCELERATOR/README.md)
 - [YOLOv5s RTL Accelerator 자세히 보기](02_YOLOV5S_RTL_ACCELERATOR/README.md)
