@@ -56,55 +56,64 @@
 
 ## Software · Quantization · HW–SW Co-design 역량
 
-RTL을 먼저 만들고 모델을 끼워 맞춘 것이 아니라, **학습 단계부터 실제 정수 하드웨어에서 사용할 수치체계와 정확도 손실을 함께 설계**했습니다.
+두 프로젝트 모두 RTL을 먼저 만든 뒤 모델을 맞춘 것이 아니라, **학습·양자화 단계부터 실제 정수 하드웨어의 bit-width, scale, requantization과 연결**했습니다.
 
-### MobileNetV1
+### MobileNetV1 — 실제 INT8 QAT Notebook 기반
 
-- PyTorch 기반 MobileNetV1 학습 및 **INT8 QAT**
-- DWC/PWC workload 특성을 RTL 병렬도와 메모리 구조에 반영
-- Software 결과와 FPGA/RTL 출력의 정합성 검증
+**1. ImageNet pretrained MobileNetV1 + INT8 QAT**
+- `timm`의 `mobilenetv1_100` pretrained model을 기반으로 QAT flow 구성
+- FBGEMM QAT에서 activation은 **per-tensor asymmetric**, weight는 **per-channel symmetric INT8**로 학습
+- `QuantStub / DeQuantStub`, FakeQuant와 Observer를 이용해 training 단계에서 정수 양자화 동작을 모사
+
+**2. ImageNet QAT Fine-tuning**
+- ILSVRC2012 train set, 224×224 입력
+- `RandomResizedCrop`, `RandomHorizontalFlip`, `ColorJitter` 기반 augmentation
+- Batch 64, **AdamW**, label smoothing, **CosineAnnealingLR**, 20 epoch fine-tuning
+- activation/weight 분포에 맞춰 scale과 zero-point를 학습
+
+**3. Fully Quantized INT8 Model 검증**
+- QAT model을 실제 INT8 inference model로 변환
+- FP32와 INT8 model을 동일한 ILSVRC2012 validation flow에서 Top-1 / Top-5로 비교
+
+| MobileNetV1 Software Result | FP32 | INT8 QAT |
+|---|---:|---:|
+| Top-1 Accuracy | 69.64% | **69.24%** |
+| Top-5 Accuracy | 89.20% | **88.79%** |
+| Model Size | 16.67 MB | **4.40 MB** |
+
+**4. RTL용 정수 Parameter 생성**
+- INT8 weight와 per-channel weight scale 추출
+- FP32 bias를 **INT32 bias**로 변환
+- `(input scale × weight scale) / output scale`을 RTL에서 사용할 **integer multiplier + shift** 형태로 근사
+- layer별 activation/feature map을 추출하고 RTL memory format용 정수/HEX data로 변환
+
+**5. Integer Reference 경로 구성**
+- Stem과 각 DWC/PWC block을 `INT32 accumulation → integer requantization → uint8 activation` 순서로 재구성
+- PyTorch quantized layer output과 layer별로 비교할 수 있는 독립 정수 reference path를 구성
+
+즉 MobileNetV1에서도 단순 INT8 변환에 그치지 않고, **QAT → 정수 parameter 추출 → requantization 설계 → RTL 입력/weight format → integer reference**까지 연결했습니다.
 
 ### YOLOv5s — 실제 학습 Notebook 기반
 
-**1. FP32 Teacher + ReLU Recovery**
-- PASCAL VOC20, 640×640 입력 기준 teacher 학습
-- SiLU를 RTL 친화적인 ReLU로 전환
-- checkpoint mapping과 남은 SiLU 여부를 검사한 뒤 accuracy recovery training
+**1. Low-bit QAT와 Mixed Precision**
+- FP32 model을 RTL 친화적인 ReLU 구조로 전환하고 accuracy recovery 수행
+- INT8 QAT를 거쳐 모든 convolution weight는 **W4**
+- 대부분의 activation은 **A4**, 입력과 민감한 공유 feature 경계는 **A8**로 구성
 
-**2. Brevitas 기반 INT8 QAT**
-- `Conv2d → QuantConv2d`, `ReLU → QuantReLU`
-- QuantConv2d 60개 / QuantReLU 57개로 변환 후 float Conv·SiLU 잔존 여부 audit
-- activation scale calibration, BN statistics freeze, EMA를 포함한 QAT flow 구성
+**2. Knowledge Distillation**
+- FP32 Teacher와 Quantized Student 사이에서 **box · object/class · selected feature** 정보를 이용한 KD 구성
+- 저비트 학습 과정에서 표현 손실을 완화하는 training component로 사용
 
-**3. Hardware-aware W4 + A4/A8 Mixed Precision**
-- 모든 convolution weight를 **W4**
-- 입력과 오차에 민감한 공유 feature 경계는 **A8**
-- 대부분의 내부 activation은 **A4**
-- 최종 checkpoint에서 bit-width map을 다시 검사해 실제 graph의 정밀도 구성을 검증
+**3. RTL Parameter Export + Integer Reference**
+- Weight, activation scale, bias, requantization parameter와 multi-source scale 관계를 RTL용으로 export
+- 원본 YOLO/Brevitas 객체에 의존하지 않는 **독립 Integer / RTL-C style Reference Model**로 전체 모델 재검증
 
-**4. Teacher–Student Knowledge Distillation**
-- Detection box
-- Objectness / class
-- 선택한 backbone·neck feature 표현
-을 student에 전달하도록 KD loss를 구성했습니다.
-
-> KD를 사용했다는 사실 자체를 정확도 향상으로 과장하지 않고, **저비트 학습에서 정보 손실을 완화하기 위한 학습 구성 요소**로 사용했습니다.
-
-**5. RTL Parameter Export + Integer Reference**
-- Quantized weight
-- Activation scale / bit-width map
-- Integer bias
-- Requantization parameter
-- Residual / concat 등 multi-source scale 관계
-를 추출·검증한 뒤 RTL parameter로 연결했습니다.
-- 원본 YOLO/Brevitas model object 없이 실행되는 **독립 Integer / RTL-C style Reference Model**을 구성해 정수 하드웨어 동작을 software에서 재검증했습니다.
-
-| Software 검증 단계 | VOC2007 test 결과 |
+| YOLOv5s Software Result | VOC2007 test |
 |---|---:|
-| 최종 W4 + selective A4/A8 Quantized Model | mAP@0.5 **80.48%** · mAP@0.5:0.95 **55.94%** |
+| W4 + selective A4/A8 Quantized Model | mAP@0.5 **80.48%** · mAP@0.5:0.95 **55.94%** |
 | RTL/C-style Integer Reference | mAP@0.5 **79.79%** · mAP@0.5:0.95 **55.40%** |
 
-즉, Software 역량은 단순한 “양자화 적용”이 아니라 **정확도 요구를 Bit-width · Requantization · RTL 연산 규칙 · Memory Cost와 연결해 판단하는 HW–SW 공동 최적화**에 있습니다.
+두 프로젝트를 통해 보여주고 싶은 Software 역량은 단순한 “양자화 적용”이 아니라, **정확도 요구를 Bit-width · Scale · Requantization · RTL 연산 규칙 · Memory Cost와 연결해 판단하는 HW–SW 공동 최적화**입니다.
 
 → [YOLOv5s Software-to-RTL Pipeline](02_YOLOV5S_RTL_ACCELERATOR/software/README.md)
 
