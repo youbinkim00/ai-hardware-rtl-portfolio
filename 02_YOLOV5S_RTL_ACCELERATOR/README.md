@@ -6,6 +6,19 @@
 
 이 저장소는 YOLOv5s 기반 객체검출 가속기를 SystemVerilog RTL로 구현하면서 수행한 설계·검증·SoC 통합 과정을 정리한 공개 기술 포트폴리오입니다. 논문 투고 전 지식재산을 보호하기 위해 전체 RTL과 세부 architecture는 공개하지 않으며, 재현 가능한 검증 방법과 engineering evidence를 중심으로 설명합니다.
 
+## 30초 요약
+
+| 항목 | 내용 |
+|---|---|
+| 무엇을 만들었나? | YOLOv5s 기반 mixed-precision RTL object-detection accelerator |
+| 왜 어려운가? | residual, concat, SPPF, multi-scale head 때문에 layer 간 dependency와 feature-map lifetime이 복잡함 |
+| 어떻게 해결했나? | shared PE의 역할을 구간별로 바꾸고, dependency-aware schedule과 on-chip memory lifetime을 함께 설계 |
+| 어떻게 검증했나? | integer reference → full-network RTL regression → AXI VIP stress → FPGA implementation |
+| 어디까지 했나? | ZCU104 AXI/DMA integration + PYNQ object-detection demo |
+| 대표 결과 | PE utilization 90.8% · RTL regression mismatch 0 |
+
+> **PE(Processing Element)**는 실제 MAC 연산을 수행하는 기본 연산 블록입니다. 이 프로젝트의 핵심은 PE 개수를 늘리는 것이 아니라, layer dependency에 맞춰 **같은 PE를 더 오래 유효하게 사용**하는 것입니다.
+
 ## Project at a glance
 
 | 항목 | 내용 |
