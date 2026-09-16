@@ -1,151 +1,212 @@
-# AI Accelerator RTL Engineering Portfolio
+# AI/NPU RTL·FPGA 설계 포트폴리오
 
-> **두 개의 AI 가속기를 직접 설계하고, FPGA 구현과 PYNQ 데모까지 연결한 RTL/FPGA 포트폴리오**
+> **AI 모델 학습·양자화부터 SystemVerilog RTL, FPGA 구현, AXI/DMA SoC 통합, Zynq/PYNQ 데모까지 직접 연결한 HW–SW Co-design 포트폴리오**
 
-이 포트폴리오는 “AI 모델을 FPGA에서 돌렸다”는 결과보다, **모델을 실제 디지털 하드웨어 시스템으로 바꾸는 과정**을 보여줍니다.  
-제가 직접 수행한 범위는 **저정밀 모델 설계 → SystemVerilog RTL → 자동 검증 → AXI/DMA SoC 통합 → FPGA 배치·배선 → PYNQ 데모**입니다.
+이 저장소는 단순히 **“AI 모델을 FPGA에서 실행했다”**는 결과보다, 모델의 연산·데이터 이동 특성을 분석해 **저정밀 수치체계 → 연산기·메모리·제어 구조 → RTL 검증 → 실제 FPGA 시스템**으로 완성한 과정을 보여줍니다.
 
-<p align="center">
-  <img src="assets/diagrams/portfolio_map.svg" alt="AI accelerator RTL portfolio map" width="1080">
-</p>
+제가 직접 수행한 범위는 다음과 같습니다.
+
+**PyTorch 모델 학습 · QAT · 지식 증류 · HW-aware Mixed Precision → SystemVerilog RTL → Integer Reference 기반 검증 → Vivado 합성·배치배선/PPA 분석 → AXI/DMA 통합 → ZCU102·ZCU104 PYNQ Demo**
+
+---
 
 ## 30초 요약
 
-| 질문 | 답변 |
-|---|---|
-| 무엇을 만들었나? | MobileNetV1 영상분류 가속기와 YOLOv5s 객체검출 가속기 |
-| 어디까지 구현했나? | RTL 설계, FPGA implementation, AXI/DMA 기반 Zynq SoC 통합, PYNQ demo |
-| 핵심 강점은? | 모델 구조와 데이터 흐름을 분석해 **연산기·메모리·제어를 함께 설계**하고, 실제 FPGA 결과로 검증 |
-| 어떻게 정확성을 확인했나? | software reference와 RTL 출력을 자동 비교하고, AXI backpressure까지 별도 검증 |
-| 회사에서 바로 연결되는 역량은? | Digital HW/FPGA RTL, AI accelerator architecture, AXI SoC integration, timing/congestion debugging |
-
-## 두 프로젝트 한눈에 보기
-
-| | MobileNetV1 | YOLOv5s |
+| 구분 | 02 · MobileNetV1 | 03 · YOLOv5s |
 |---|---|---|
 | 응용 | 영상 분류 | 객체 검출 |
-| 설계 목표 | 경량 CNN을 높은 전성비로 가속 | 복잡한 detector graph를 실시간으로 가속 |
-| 핵심 문제 | DWC/PWC의 낮은 활용률과 memory bottleneck | 분기·concat·다중 head로 인한 연산 대기와 data movement |
-| 설계 접근 | layer별 병렬도, local reuse, sliding-window pipeline | dependency-aware shared PE, on-chip feature lifetime, full-network scheduling |
+| Software | INT8 QAT | QAT · Knowledge Distillation · W4/A4·A8 Mixed Precision |
+| 주요 HW 문제 | DWC/PWC의 서로 다른 연산 특성, 메모리 접근 비용 | Branch/Concat/Multi-scale 경로의 계층 의존성, 연산 대기, 데이터 이동 |
+| RTL 설계 | 가변 병렬도 · Sliding-window Pipeline · Local Memory Reuse | 공유 PE · 계층 의존성 기반 Dataflow · On-chip Feature Lifetime 관리 |
 | FPGA | ZCU102 / XCZU9EG | ZCU104 |
-| 시스템 | AXI4-Lite/Stream · DMA · FIFO · PYNQ | AXI4-Lite/Stream · DMA · SmartConnect · FIFO · PYNQ |
-| Demo | PYNQ classification | PYNQ object detection |
+| System | AXI4-Lite/Stream · DMA · FIFO · PYNQ | AXI4-Lite/Stream · DMA · SmartConnect · FIFO · PYNQ |
+| Demo | **PYNQ 영상 분류 구현** | **PYNQ 객체 검출 구현** |
 
-> **QAT**는 Quantization-Aware Training, **RTL**은 cycle 단위 hardware behavior를 정의하는 Register-Transfer Level 설계, **DMA**는 DDR과 PL accelerator 사이의 대용량 데이터 전송을 담당합니다.
+---
 
-## 핵심 결과
+## 핵심 구현 결과
 
-### 02 · MobileNetV1 RTL Accelerator
+두 프로젝트 모두 **RTL 설계 → FPGA implementation → Zynq/PYNQ application**까지 연결했습니다.  
+메인 결과는 검증 로그보다 **자원·처리성능·전력효율·시스템 구현 여부** 중심으로 정리했습니다.
 
-- PE utilization **98.64%**
-- **252.7 FPS**
-- **287.6 GOPS**
-- **66.9 GOPS/W**
-- **3.34 GOPS/DSP**
-- ZCU102 PYNQ classification demo 구현
+| Metric | MobileNetV1 | YOLOv5s |
+|---|---:|---:|
+| FPGA | ZCU102 / XCZU9EG | ZCU104 |
+| Clock | 150 MHz | 200 MHz 기준 accelerator 성능 |
+| Precision | INT8 | W4 / A4·A8 Mixed Precision |
+| LUT | 171.3K | 157.3K |
+| FF | 100K | 170.3K |
+| BRAM | 489.5 | 244 |
+| URAM | - | 64 |
+| DSP | 86 | 1,152 |
+| Frame rate | **252.7 FPS** | **76.92 FPS** |
+| Throughput | **287.6 GOPS** | **1,224.4 GOPS** |
+| Power report | 4.296 W | 4.59 W |
+| Power efficiency | **66.9 GOPS/W** | **266.8 GOPS/W** |
+| PYNQ Demo | **Classification 구현** | **Object Detection 구현** |
 
-→ [MobileNetV1 상세 보기](03_MOBILENET_RTL_ACCELERATOR/README.md)
+> **수치 해석 기준**  
+> MobileNetV1은 150 MHz implementation 결과입니다. YOLOv5s의 76.92 FPS / 1,224.4 GOPS는 200 MHz 기준 accelerator 성능으로 정리한 값이며, 현재 repository의 final timing closure와 camera-to-display FPS는 별도의 검증 경계로 관리합니다. Power 값은 implementation power report 기준이며 board 전체 실측 전력과 구분합니다.
 
-### 03 · YOLOv5s RTL Accelerator
+- [MobileNetV1 RTL Accelerator 자세히 보기](03_MOBILENET_RTL_ACCELERATOR/README.md)
+- [YOLOv5s RTL Accelerator 자세히 보기](02_YOLOV5S_RTL_ACCELERATOR/README.md)
 
-- Full-network PE utilization **90.8%**
-- RTL numeric model: mAP@0.5 **79.79%**, mAP@0.5:0.95 **55.40%**
-- VOC 10개 입력, 이미지당 raw output 100,800개 비교에서 **mismatch 0**
-- AXI stress: 33,600 beats, input gap 3,729 cycles, output stall 18,200 cycles
-- ZCU104 implementation: LUT 157.3K · FF 170.3K · BRAM 244 · URAM 64 · DSP 1,152
-- ZCU104 PYNQ object-detection demo 구현
+---
 
-→ [YOLOv5s 상세 보기](02_YOLOV5S_RTL_ACCELERATOR/README.md)
+## Software · Quantization · HW–SW Co-design 역량
 
-## 실제 시스템 구현
+RTL을 먼저 만들고 모델을 끼워 맞춘 것이 아니라, **학습 단계부터 실제 정수 하드웨어에서 사용할 수치체계와 정확도 손실을 함께 설계**했습니다.
 
-<table>
-<tr>
-<td align="center" width="50%"><b>MobileNetV1 · ZCU102</b></td>
-<td align="center" width="50%"><b>YOLOv5s · ZCU104</b></td>
-</tr>
-<tr>
-<td align="center"><img src="assets/evidence/mobilenet_pynq_sw_hw_system.png" alt="MobileNetV1 PYNQ software-hardware integration" width="420"></td>
-<td align="center"><img src="assets/evidence/yolov5s_zcu104_pynq_demo.png" alt="YOLOv5s ZCU104 PYNQ object-detection demo" width="420"></td>
-</tr>
-<tr>
-<td align="center"><sub>Python/PYNQ → AXI DMA → PL accelerator</sub></td>
-<td align="center"><sub>실제 ZCU104 board + detection monitor</sub></td>
-</tr>
-</table>
+### MobileNetV1
 
-실제 Vivado Block Design과 AXI VIP 검증 환경도 각 프로젝트 문서에서 확인할 수 있습니다.  
-논문 투고 전 보호가 필요한 내부 PE 구조와 novelty diagram은 공개하지 않았습니다.
+- PyTorch 기반 MobileNetV1 학습 및 **INT8 QAT**
+- DWC/PWC workload 특성을 RTL 병렬도와 메모리 구조에 반영
+- Software 결과와 FPGA/RTL 출력의 정합성 검증
+
+### YOLOv5s — 실제 학습 Notebook 기반
+
+**1. FP32 Teacher + ReLU Recovery**
+- PASCAL VOC20, 640×640 입력 기준 teacher 학습
+- SiLU를 RTL 친화적인 ReLU로 전환
+- checkpoint mapping과 남은 SiLU 여부를 검사한 뒤 accuracy recovery training
+
+**2. Brevitas 기반 INT8 QAT**
+- `Conv2d → QuantConv2d`, `ReLU → QuantReLU`
+- QuantConv2d 60개 / QuantReLU 57개로 변환 후 float Conv·SiLU 잔존 여부 audit
+- activation scale calibration, BN statistics freeze, EMA를 포함한 QAT flow 구성
+
+**3. Hardware-aware W4 + A4/A8 Mixed Precision**
+- 모든 convolution weight를 **W4**
+- 입력과 오차에 민감한 공유 feature 경계는 **A8**
+- 대부분의 내부 activation은 **A4**
+- 최종 checkpoint에서 bit-width map을 다시 검사해 실제 graph의 정밀도 구성을 검증
+
+**4. Teacher–Student Knowledge Distillation**
+- Detection box
+- Objectness / class
+- 선택한 backbone·neck feature 표현
+을 student에 전달하도록 KD loss를 구성했습니다.
+
+> KD를 사용했다는 사실 자체를 정확도 향상으로 과장하지 않고, **저비트 학습에서 정보 손실을 완화하기 위한 학습 구성 요소**로 사용했습니다.
+
+**5. RTL Parameter Export + Integer Reference**
+- Quantized weight
+- Activation scale / bit-width map
+- Integer bias
+- Requantization parameter
+- Residual / concat 등 multi-source scale 관계
+를 추출·검증한 뒤 RTL parameter로 연결했습니다.
+- 원본 YOLO/Brevitas model object 없이 실행되는 **독립 Integer / RTL-C style Reference Model**을 구성해 정수 하드웨어 동작을 software에서 재검증했습니다.
+
+| Software 검증 단계 | VOC2007 test 결과 |
+|---|---:|
+| 최종 W4 + selective A4/A8 Quantized Model | mAP@0.5 **80.48%** · mAP@0.5:0.95 **55.94%** |
+| RTL/C-style Integer Reference | mAP@0.5 **79.79%** · mAP@0.5:0.95 **55.40%** |
+
+즉, Software 역량은 단순한 “양자화 적용”이 아니라 **정확도 요구를 Bit-width · Requantization · RTL 연산 규칙 · Memory Cost와 연결해 판단하는 HW–SW 공동 최적화**에 있습니다.
+
+→ [YOLOv5s Software-to-RTL Pipeline](02_YOLOV5S_RTL_ACCELERATOR/software/README.md)
+
+---
+
+## 실제 시스템 구현 — Zynq + PYNQ
+
+두 프로젝트 모두 **AMD-Xilinx Zynq UltraScale+ 보드**를 사용해 실제 PS–PL 시스템까지 구현했습니다.
+
+- **MobileNetV1**: ZCU102 + AXI DMA + FIFO + PYNQ 기반 영상 분류
+- **YOLOv5s**: ZCU104 + AXI DMA + SmartConnect + FIFO + PYNQ 기반 객체 검출
+
+PYNQ 환경에서는 Python application이 PS에서 overlay와 DMA를 제어하고, PL의 custom RTL accelerator가 inference를 수행하도록 구성했습니다.
+
+아래 사진은 **ZCU104 + PYNQ 기반 YOLOv5s 객체 검출 시스템을 대표 예시로 보여주는 실제 Demo**입니다.
+
+<p align="center">
+  <img src="assets/evidence/yolov5s_zcu104_pynq_demo.png" alt="ZCU104 PYNQ YOLOv5s 객체 검출 데모" width="850">
+</p>
+<p align="center"><sub>실제 ZCU104 FPGA Board + PYNQ Runtime + YOLOv5s Object Detection Demo</sub></p>
+
+Software와 PL을 분리하지 않고 **입력 → DMA → RTL Accelerator → 후처리 → 결과 표시**까지 application flow를 연결했습니다.
+
+실제 Vivado system integration:
+
+- [MobileNetV1 ZCU102 AXI/DMA System](03_MOBILENET_RTL_ACCELERATOR/README.md#zcu102-axi--dma-integration)
+- [YOLOv5s ZCU104 AXI/DMA System](02_YOLOV5S_RTL_ACCELERATOR/docs/05_ZCU104_DMA_INTEGRATION.md)
+
+---
 
 ## 이 포트폴리오에서 확인할 수 있는 역량
 
-### 1. AI model → RTL 변환
+### 1. AI 모델 학습 · 양자화 · 저정밀 최적화
+PyTorch 기반 model training, ReLU recovery, QAT, Knowledge Distillation, hardware-aware mixed precision을 직접 구성했습니다.  
+정확도만 보는 것이 아니라 **실제 RTL bit-width와 연산 비용까지 함께 판단**했습니다.
 
-저정밀 모델의 bit width, scale, rounding, saturation을 hardware rule로 고정하고 software reference와 RTL이 같은 계산을 수행하도록 연결했습니다.
+### 2. Software–RTL Numeric Contract 설계
+Scale, signedness, rounding, saturation, bias, requantization을 software reference와 RTL에서 동일하게 정의하고 parameter export와 bit-width map을 검증했습니다.
 
-### 2. SystemVerilog 기반 accelerator 설계
+### 3. SystemVerilog 기반 RTL Architecture 설계
+연산 블록만 구현하지 않고 **PE, Pipeline, Memory Controller, Buffer, Address Generation, Requantization, Layer Control**을 함께 설계했습니다.
 
-연산기만 만드는 것이 아니라 **memory controller, dataflow, layer dependency, pipeline, completion timing**을 함께 설계했습니다.
+### 4. 데이터 이동 · 메모리 · Scheduling 최적화
+MobileNetV1에서는 DWC/PWC local reuse와 Sliding-window Pipeline을, YOLOv5s에서는 장거리 branch feature map의 on-chip 유지와 dependency-aware scheduling을 적용했습니다.
 
-### 3. 자동화된 기능 검증
+### 5. 검증 가능한 RTL 개발
+Integer Reference와 Golden Data를 기반으로 RTL 출력을 자동 비교하고, AXI에서는 입력 gap과 output backpressure 조건까지 별도 검증했습니다.
 
-파형을 눈으로만 확인하지 않고 expected count와 data mismatch를 자동 비교했습니다.  
-YOLOv5s는 full-network regression에서 공개 가능한 테스트 입력 기준 **mismatch 0**을 확인했습니다.
+### 6. FPGA Physical Implementation
+Vivado에서 synthesis 숫자만 확인하지 않고 **Timing, Fanout, Placement, Routing Congestion, Resource, Power**를 분석해 RTL과 implementation 전략을 조정했습니다.
 
-### 4. AXI / Zynq SoC 통합
+### 7. AXI / Zynq / PYNQ System Integration
+AXI4-Lite control, AXI4-Stream data, DMA, FIFO, SmartConnect를 이용해 PS–PL system을 구성하고 두 가속기를 실제 application demo까지 연결했습니다.
 
-AXI4-Lite control, AXI4-Stream data, DMA, FIFO, SmartConnect와 PYNQ를 이용해 PS–PL system을 구성했습니다.
-
-### 5. FPGA physical implementation
-
-Vivado synthesis 숫자만 보는 것이 아니라 placement, routing, timing, fanout, congestion과 resource utilization을 분석해 RTL을 개선했습니다.
+---
 
 ## 설계 방법론
 
-<p align="center">
-  <img src="assets/diagrams/whole_stack.svg" alt="Whole-stack AI accelerator optimization loop" width="1120">
-</p>
+AI로 생성한 영어 infographic 대신, 실제 프로젝트에서 사용한 개발 절차를 **한글 중심으로** 정리했습니다.
 
-두 프로젝트의 workload는 다르지만 동일한 순서로 문제를 해결했습니다.
+| 단계 | 핵심 질문 | 실제 수행 내용 |
+|---|---|---|
+| **1. 모델·정밀도 분석** | 어떤 연산과 정밀도가 정확도/비용에 민감한가? | QAT · KD · Mixed Precision · Layer/Boundary 분석 |
+| **2. HW 구조 결정** | 어떤 병렬도·Pipeline·Memory 구조가 적합한가? | PE 역할 · Buffer · Dataflow · On-chip Reuse 설계 |
+| **3. 수치·기능 검증** | Software와 RTL이 같은 계산을 하는가? | Integer Reference · Parameter Export · Golden Regression |
+| **4. 시스템 통합** | PS/DDR/PL 환경에서도 안정적인가? | AXI4-Lite/Stream · DMA · FIFO · Backpressure 검증 |
+| **5. 물리 구현** | 실제 FPGA에서 목표 PPA를 만족할 수 있는가? | Timing · Fanout · Congestion · Resource · Power 분석 |
+| **6. Board Demo** | 전체 application으로 동작하는가? | ZCU102/ZCU104 PYNQ 영상 분류·객체 검출 Demo |
 
-```text
-Model / QAT
-    ↓
-Numeric contract
-    ↓
-RTL architecture
-    ↓
-Functional verification
-    ↓
-AXI / SoC integration
-    ↓
-Place & Route
-    ↓
-Board demo / measured evidence
-```
+핵심은 특정 RTL 모듈 하나가 아니라 **Model → Numeric Design → RTL Architecture → Verification → Physical Implementation → System Demo**를 하나의 engineering flow로 닫는 것입니다.
 
-## 더 자세히 보기
+---
 
-1. [MobileNetV1 RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md)
-2. [YOLOv5s RTL Accelerator](02_YOLOV5S_RTL_ACCELERATOR/README.md)
-3. [YOLO Software–RTL Numeric Contract](02_YOLOV5S_RTL_ACCELERATOR/docs/02_SW_RTL_NUMERIC_CONTRACT.md)
-4. [Verification Strategy](02_YOLOV5S_RTL_ACCELERATOR/docs/03_VERIFICATION_STRATEGY.md)
-5. [AXI VIP Verification](02_YOLOV5S_RTL_ACCELERATOR/docs/04_AXI_VIP_VERIFICATION.md)
-6. [Physical Design Debugging](02_YOLOV5S_RTL_ACCELERATOR/docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
-7. [Engineering Notes](02_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md)
+## 프로젝트 자세히 보기
 
-## Result boundary
+### 02 · MobileNetV1
+- [MobileNetV1 RTL Accelerator](03_MOBILENET_RTL_ACCELERATOR/README.md)
 
-수치의 의미를 섞지 않습니다.
+### 03 · YOLOv5s
+- [YOLOv5s RTL Accelerator](02_YOLOV5S_RTL_ACCELERATOR/README.md)
+- [Software / QAT / Mixed Precision](02_YOLOV5S_RTL_ACCELERATOR/software/README.md)
+- [Software–RTL Numeric Contract](02_YOLOV5S_RTL_ACCELERATOR/docs/02_SW_RTL_NUMERIC_CONTRACT.md)
+- [Verification Strategy](02_YOLOV5S_RTL_ACCELERATOR/docs/03_VERIFICATION_STRATEGY.md)
+- [AXI VIP Verification](02_YOLOV5S_RTL_ACCELERATOR/docs/04_AXI_VIP_VERIFICATION.md)
+- [ZCU104 DMA Integration](02_YOLOV5S_RTL_ACCELERATOR/docs/05_ZCU104_DMA_INTEGRATION.md)
+- [Physical Design Debugging](02_YOLOV5S_RTL_ACCELERATOR/docs/06_PHYSICAL_DESIGN_DEBUGGING.md)
+- [Engineering Notes](02_YOLOV5S_RTL_ACCELERATOR/engineering_notes/README.md)
 
-- accelerator cycle 기반 FPS ≠ camera-to-display FPS
-- Vivado power estimate ≠ board 실측 power
-- legal route ≠ timing closure
-- PYNQ demo 구현 ≠ 공개 가능한 numeric continuous-video benchmark
+---
 
-따라서 아직 공개 증거가 없는 값은 예상치로 채우지 않습니다.
+## 결과 해석 기준
 
-## Disclosure
+서로 다른 검증 경계의 수치를 하나의 성능으로 섞지 않습니다.
 
-전체 RTL, trained weights, parameter payload, golden vector, 상세 PE/memory architecture, 논문용 novelty figure, Vivado generated products와 bitstream은 공개하지 않습니다.  
+- Accelerator cycle 기반 FPS ≠ Camera-to-display FPS
+- Vivado/Implementation Power Report ≠ Board 전체 실측 전력
+- Routing 성공 ≠ Timing Closure 완료
+- Software Quantized Model ≠ RTL/C-style Integer Reference
+
+---
+
+## 공개 범위
+
+논문 및 연구 결과의 지식재산을 보호하기 위해 전체 RTL, Trained Weight, Parameter Payload, Golden Vector, 상세 PE/Memory Architecture와 Bitstream은 공개하지 않습니다.
+
 공개 범위는 [Disclosure Policy](DISCLOSURE_POLICY.md)를 따릅니다.
