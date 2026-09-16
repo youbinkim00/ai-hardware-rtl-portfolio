@@ -13,11 +13,11 @@
   <marker id="arrow" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#8199b0"/></marker>
   <style>
     .f{font-family:Inter,"Segoe UI",Arial,sans-serif}
-    .eyebrow{font-size:12px;font-weight:700;letter-spacing:.7px}
-    .title{font-size:21px;font-weight:700}
-    .body{font-size:13px}
-    .small{font-size:11.5px}
-    .chip{font-size:11px;font-weight:700;letter-spacing:.2px}
+    .eyebrow{font-size:12px;font-weight:800;letter-spacing:.7px}
+    .title{font-size:21px;font-weight:800}
+    .body{font-size:13px;font-weight:500}
+    .small{font-size:11.5px;font-weight:500}
+    .chip{font-size:11px;font-weight:800;letter-spacing:.2px}
   </style>
 </defs>
 <rect width="1200" height="500" rx="28" fill="url(#bg)"/>
