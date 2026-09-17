@@ -2,7 +2,7 @@
 
 이 디렉터리는 프로젝트 전체 RTL을 공개하지 않고도 FPGA/RTL 실무에서 얻은 세부 지식을 정리하는 짧은 기술 노트 모음입니다.
 
-## Planned notes
+## Notes
 
 | No. | 주제 | 핵심 내용 |
 |---:|---|---|
@@ -15,6 +15,7 @@
 | 007 | [Incremental DCP](007_INCREMENTAL_DCP_FLOW.md) | Legal route 보존과 수정 logic 반영 확인 |
 | 008 | [Timing/Congestion](008_TIMING_AND_CONGESTION.md) | Overlap, failed net, high fanout과 timing을 구분하는 법 |
 | 009 | [Selective wrapper timing guardband](009_SELECTIVE_WRAPPER_TIMING_GUARDBAND.md) | 5.0 ns nominal clock, 4.8 ns 국소 margin과 이중 sign-off |
+| 010 | [Post-route analysis automation](010_POST_ROUTE_ANALYSIS_AUTOMATION.md) | Timing · Routing · Power를 동일 조건에서 반복 수집하는 Tcl audit flow |
 
 ## Article template
 
